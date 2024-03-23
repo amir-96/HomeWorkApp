@@ -41,7 +41,7 @@ namespace Application.Features.Users.Commands
       oldUserResponse.Data.UserName = request.EditUserDTO.UserName;
       oldUserResponse.Data.Email = request.EditUserDTO.Email;
       oldUserResponse.Data.Role = request.EditUserDTO.Role;
-      oldUserResponse.Data.Image = request.EditUserDTO.Image;
+      oldUserResponse.Data.UpdatedAt = DateTime.UtcNow;
 
       var response = await _userRepo.Update(oldUserResponse.Data.Id, oldUserResponse.Data);
 

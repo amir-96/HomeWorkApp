@@ -42,6 +42,9 @@ namespace Infrastructure.Mapping
             UserName = "amir",
             Email = "amirjob75@gmail.com",
             HashedPassword = BCrypt.Net.BCrypt.HashPassword("amir12345"),
+            PhoneNumber = "09163097345",
+            FirstName = "امیر",
+            LastName = "حسینی",
             Role = Roles.Admin,
             Image = "default.jpg"
           }

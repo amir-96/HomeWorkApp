@@ -1,0 +1,520 @@
+﻿<!DOCTYPE html>
+<html lang="en" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!--Regular Datatables CSS-->
+  <link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css"
+        rel="stylesheet" />
+  <!--Responsive Extension Datatables CSS-->
+  <link href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css"
+        rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+  <link rel="stylesheet" href="~/ServiceHost.styles.css" asp-append-version="true" />
+
+  <title>@ViewData["Title"] - پنل کاربری</title>
+</head>
+
+<body class="bg-gray-50">
+
+  <!-- Header -->
+
+  <header class="fixed flex md:flex-row-reverse items-center justify-between gap-4 px-4 md:pr-[280px] left-0 top-0 right-0 h-20 border-b shadow bg-white z-10">
+    <div onclick="toggleSidebar()" class="md:hidden">
+      <svg class="w-9 h-9"
+           viewBox="0 0 24 24"
+           fill="none"
+           xmlns="http://www.w3.org/2000/svg">
+        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+        <g id="SVGRepo_tracerCarrier"
+           stroke-linecap="round"
+           stroke-linejoin="round"></g>
+        <g id="SVGRepo_iconCarrier">
+          <g id="Menu / Menu_Alt_01">
+            <path id="Vector"
+                  d="M12 17H19M5 12H19M5 7H19"
+                  stroke="#374151"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"></path>
+          </g>
+        </g>
+      </svg>
+    </div>
+
+    <div>
+      <img class="w-12 h-12 rounded-full ring-1 ring-lime-400"
+           src="~/images/default.png"
+           alt=""
+           style="user-select: none; pointer-events: none" />
+    </div>
+  </header>
+
+  <!-- Backdrop -->
+
+  <div id="backdrop"
+       onclick="toggleSidebar()"
+       class="hidden fixed inset-0 bg-black bg-opacity-50 z-20 transition-opacity duration-500"></div>
+
+  <!-- Sidebar -->
+
+  <aside id="sidebar"
+         class="fixed flex flex-col top-0 right-[-256px] md:right-0 w-[256px] bg-white h-full border-l z-40 transition-all duration-500">
+    <div class="flex flex-col items-center justify-center h-fit py-4 gap-2">
+      <img class="w-20 h-20 rounded-full ring-2 ring-lime-400 mx-auto"
+           src="~/images/default.png"
+           alt=""
+           style="user-select: none; pointer-events: none" />
+      <div>امیر حسینی</div>
+      <div class="text-sm font-semibold bg-indigo-200 rounded-full px-2">
+        مدیر
+      </div>
+    </div>
+    <div class="overflow-y-auto overflow-x-hidden flex-grow">
+      <ul class="flex flex-col py-4">
+        <li onclick="toggleAdmin()" class="border-t">
+          <div class="relative flex flex-row items-center justify-between h-11 focus:outline-none hover:bg-gray-50 text-gray-600 hover:text-gray-800 border-r-4 border-transparent hover:border-indigo-500 pr-6 cursor-pointer"
+               style="user-select: none">
+            <div class="flex items-center gap-2">
+              <span class="inline-flex justify-center items-center">
+                <svg class="w-5 h-5"
+                     version="1.1"
+                     id="Uploaded to svgrepo.com"
+                     xmlns="http://www.w3.org/2000/svg"
+                     xmlns:xlink="http://www.w3.org/1999/xlink"
+                     viewBox="0 0 32 32"
+                     xml:space="preserve"
+                     fill="#000000">
+                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                <g id="SVGRepo_tracerCarrier"
+                   stroke-linecap="round"
+                   stroke-linejoin="round"></g>
+                <g id="SVGRepo_iconCarrier">
+                <style type="text/css">
+                  .stone_een {
+                    fill: #374151;
+                  }
+
+                  .st0 {
+                    fill: #374151;
+                  }
+</style>
+                <path class="stone_een"
+                      d="M19,20.5c0,1.933-1.567,3.5-3.5,3.5S12,22.433,12,20.5s1.567-3.5,3.5-3.5S19,18.567,19,20.5z M16,16.051 V5.5C16,5.224,15.776,5,15.5,5S15,5.224,15,5.5v10.551C15.166,16.032,15.329,16,15.5,16S15.834,16.032,16,16.051z M15,24.949V26.5 c0,0.276,0.224,0.5,0.5,0.5s0.5-0.224,0.5-0.5v-1.551C15.834,24.968,15.671,25,15.5,25S15.166,24.968,15,24.949z M24,18.949V26.5 c0,0.276,0.224,0.5,0.5,0.5s0.5-0.224,0.5-0.5v-7.551C24.834,18.968,24.671,19,24.5,19S24.166,18.968,24,18.949z M25,10.051V5.5 C25,5.224,24.776,5,24.5,5S24,5.224,24,5.5v4.551C24.166,10.032,24.329,10,24.5,10S24.834,10.032,25,10.051z M7,7.051V5.5 C7,5.224,6.776,5,6.5,5S6,5.224,6,5.5v1.551C6.166,7.032,6.329,7,6.5,7S6.834,7.032,7,7.051z M6,15.949V26.5 C6,26.776,6.224,27,6.5,27S7,26.776,7,26.5V15.949C6.834,15.968,6.671,16,6.5,16S6.166,15.968,6,15.949z M6.5,8 C4.567,8,3,9.567,3,11.5S4.567,15,6.5,15s3.5-1.567,3.5-3.5S8.433,8,6.5,8z M24.5,11c-1.933,0-3.5,1.567-3.5,3.5s1.567,3.5,3.5,3.5 s3.5-1.567,3.5-3.5S26.433,11,24.5,11z"></path>
+                    </g>
+                  </svg>
+              </span>
+              <span class="ml-2 text-sm tracking-wide truncate">مدیریت</span>
+            </div>
+            <svg id="adminNavIcon"
+                 class="w-6 h-6 ml-5 rotate-[180] transition-all duration-500"
+                 viewBox="0 0 24 24"
+                 fill="none"
+                 xmlns="http://www.w3.org/2000/svg"
+                 transform="rotate(180)">
+              <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+              <g id="SVGRepo_tracerCarrier"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"></g>
+              <g id="SVGRepo_iconCarrier">
+                <path d="M5.70711 9.71069C5.31658 10.1012 5.31658 10.7344 5.70711 11.1249L10.5993 16.0123C11.3805 16.7927 12.6463 16.7924 13.4271 16.0117L18.3174 11.1213C18.708 10.7308 18.708 10.0976 18.3174 9.70708C17.9269 9.31655 17.2937 9.31655 16.9032 9.70708L12.7176 13.8927C12.3271 14.2833 11.6939 14.2832 11.3034 13.8927L7.12132 9.71069C6.7308 9.32016 6.09763 9.32016 5.70711 9.71069Z"
+                      fill="#374151"></path>
+              </g>
+            </svg>
+          </div>
+
+          <ul id="adminNav" class="hidden bg-gray-50">
+            <li>
+              <a href="#"
+                 class="relative flex flex-row items-center h-11 focus:outline-none hover:bg-gray-100 text-gray-600 hover:text-gray-800 border-r-4 border-indigo-400 pr-6">
+                <span class="inline-flex justify-center items-center ml-4">
+                  <svg class="w-5 h-5"
+                       fill="none"
+                       stroke="currentColor"
+                       viewBox="0 0 24 24"
+                       xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                  </svg>
+                </span>
+                <span class="ml-2 text-sm tracking-wide truncate">داشبورد</span>
+              </a>
+            </li>
+
+            <li>
+              <a href="#"
+                 class="relative flex flex-row items-center h-11 focus:outline-none hover:bg-gray-100 text-gray-600 hover:text-gray-800 border-r-4 border-indigo-400 pr-6">
+                <span class="inline-flex justify-center items-center ml-4">
+                  <svg class="w-5 h-5"
+                       fill="none"
+                       stroke="currentColor"
+                       viewBox="0 0 24 24"
+                       xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                  </svg>
+                </span>
+                <span class="ml-2 text-sm tracking-wide truncate">کاربران</span>
+                <span class="px-2 py-0.5 ml-auto text-xs font-medium tracking-wide text-green-500 bg-green-50 rounded-full">15</span>
+              </a>
+            </li>
+
+            <li>
+              <a href="#"
+                 class="relative flex flex-row items-center h-11 focus:outline-none hover:bg-gray-100 text-gray-600 hover:text-gray-800 border-r-4 border-indigo-400 pr-6">
+                <span class="inline-flex justify-center items-center ml-4">
+                  <svg class="w-5 h-5"
+                       fill="none"
+                       stroke="currentColor"
+                       viewBox="0 0 24 24"
+                       xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path>
+                  </svg>
+                </span>
+                <span class="ml-2 text-sm tracking-wide truncate">صندوق پیام</span>
+                <span class="px-2 py-0.5 ml-auto text-xs font-medium tracking-wide text-indigo-500 bg-indigo-50 rounded-full">5</span>
+              </a>
+            </li>
+
+            <li>
+              <a href="#"
+                 class="relative flex flex-row items-center h-11 focus:outline-none hover:bg-gray-100 text-gray-600 hover:text-gray-800 border-r-4 border-indigo-400 pr-6">
+                <span class="inline-flex justify-center items-center ml-4">
+                  <svg class="w-5 h-5"
+                       fill="none"
+                       stroke="currentColor"
+                       viewBox="0 0 24 24"
+                       xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+                  </svg>
+                </span>
+                <span class="ml-2 text-sm tracking-wide truncate">اعلانات</span>
+                <span class="px-2 py-0.5 ml-auto text-xs font-medium tracking-wide text-red-500 bg-red-50 rounded-full">1.2k</span>
+              </a>
+            </li>
+          </ul>
+        </li>
+
+        <li onclick="toggleTeacher()" class="border-t">
+          <div class="relative flex flex-row items-center justify-between h-11 focus:outline-none hover:bg-gray-50 text-gray-600 hover:text-gray-800 border-r-4 border-transparent hover:border-indigo-500 pr-6 cursor-pointer"
+               style="user-select: none">
+            <div class="flex items-center gap-2">
+              <span class="inline-flex justify-center items-center">
+                <svg class="w-5 h-5"
+                     viewBox="0 0 24 24"
+                     fill="none"
+                     xmlns="http://www.w3.org/2000/svg">
+                  <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                  <g id="SVGRepo_tracerCarrier"
+                     stroke-linecap="round"
+                     stroke-linejoin="round"></g>
+                  <g id="SVGRepo_iconCarrier">
+                    <path d="M16.8311 15.6402C17.5011 15.2002 18.3811 15.6802 18.3811 16.4802V17.7702C18.3811 19.0402 17.3911 20.4002 16.2011 20.8002L13.0111 21.8602C12.4511 22.0502 11.5411 22.0502 10.9911 21.8602L7.80109 20.8002C6.60109 20.4002 5.62109 19.0402 5.62109 17.7702V16.4702C5.62109 15.6802 6.50109 15.2002 7.16109 15.6302L9.22109 16.9702C10.0111 17.5002 11.0111 17.7602 12.0111 17.7602C13.0111 17.7602 14.0111 17.5002 14.8011 16.9702L16.8311 15.6402Z"
+                          fill="#374151"></path>
+                    <path d="M19.9795 6.45859L13.9895 2.52859C12.9095 1.81859 11.1295 1.81859 10.0495 2.52859L4.02953 6.45859C2.09953 7.70859 2.09953 10.5386 4.02953 11.7986L5.62953 12.8386L10.0495 15.7186C11.1295 16.4286 12.9095 16.4286 13.9895 15.7186L18.3795 12.8386L19.7495 11.9386V14.9986C19.7495 15.4086 20.0895 15.7486 20.4995 15.7486C20.9095 15.7486 21.2495 15.4086 21.2495 14.9986V10.0786C21.6495 8.78859 21.2395 7.28859 19.9795 6.45859Z"
+                          fill="#374151"></path>
+                  </g>
+                </svg>
+              </span>
+              <span class="ml-2 text-sm tracking-wide truncate">اساتید</span>
+            </div>
+            <svg id="teacherNavIcon"
+                 class="w-6 h-6 ml-5 rotate-[180] transition-all duration-500"
+                 viewBox="0 0 24 24"
+                 fill="none"
+                 xmlns="http://www.w3.org/2000/svg"
+                 transform="rotate(180)">
+              <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+              <g id="SVGRepo_tracerCarrier"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"></g>
+              <g id="SVGRepo_iconCarrier">
+                <path d="M5.70711 9.71069C5.31658 10.1012 5.31658 10.7344 5.70711 11.1249L10.5993 16.0123C11.3805 16.7927 12.6463 16.7924 13.4271 16.0117L18.3174 11.1213C18.708 10.7308 18.708 10.0976 18.3174 9.70708C17.9269 9.31655 17.2937 9.31655 16.9032 9.70708L12.7176 13.8927C12.3271 14.2833 11.6939 14.2832 11.3034 13.8927L7.12132 9.71069C6.7308 9.32016 6.09763 9.32016 5.70711 9.71069Z"
+                      fill="#374151"></path>
+              </g>
+            </svg>
+          </div>
+
+          <ul id="teacherNav" class="hidden bg-gray-50">
+            <li>
+              <a href="#"
+                 class="relative flex flex-row items-center h-11 focus:outline-none hover:bg-gray-100 text-gray-600 hover:text-gray-800 border-r-4 border-indigo-400 pr-6">
+                <span class="inline-flex justify-center items-center ml-4">
+                  <svg class="w-5 h-5"
+                       fill="none"
+                       stroke="currentColor"
+                       viewBox="0 0 24 24"
+                       xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
+                  </svg>
+                </span>
+                <span class="ml-2 text-sm tracking-wide truncate">دوره ها</span>
+              </a>
+            </li>
+
+            <li>
+              <a href="#"
+                 class="relative flex flex-row items-center h-11 focus:outline-none hover:bg-gray-100 text-gray-600 hover:text-gray-800 border-r-4 border-indigo-400 pr-6">
+                <span class="inline-flex justify-center items-center ml-4">
+                  <svg class="w-5 h-5"
+                       fill="none"
+                       stroke="currentColor"
+                       viewBox="0 0 24 24"
+                       xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
+                  </svg>
+                </span>
+                <span class="ml-2 text-sm tracking-wide truncate">تکالیف بررسی نشده</span>
+              </a>
+            </li>
+          </ul>
+        </li>
+
+        <li onclick="toggleStudent()" class="border-y">
+          <div class="relative flex flex-row items-center justify-between h-11 focus:outline-none hover:bg-gray-50 text-gray-600 hover:text-gray-800 border-r-4 border-transparent hover:border-indigo-500 pr-6 cursor-pointer"
+               style="user-select: none">
+            <div class="flex items-center gap-2">
+              <span class="inline-flex justify-center items-center">
+                <svg class="w-5 h-5"
+                     version="1.1"
+                     id="_x32_"
+                     xmlns="http://www.w3.org/2000/svg"
+                     xmlns:xlink="http://www.w3.org/1999/xlink"
+                     viewBox="0 0 512 512"
+                     xml:space="preserve"
+                     fill="#000000">
+                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                <g id="SVGRepo_tracerCarrier"
+                   stroke-linecap="round"
+                   stroke-linejoin="round"></g>
+                <g id="SVGRepo_iconCarrier">
+                <style type="text/css">
+                  .st0 {
+                    fill: #374151;
+                  }
+</style>
+                <g>
+                <path class="st0"
+                      d="M116.738,231.551c0,23.245,14.15,43.315,34.513,49.107c15.262,42.368,55.574,70.776,100.582,70.776 s85.32-28.408,100.58-70.776c20.365-5.792,34.515-25.854,34.515-49.107c0-15.691-6.734-30.652-18.061-40.248l1.661-8.921 c0-3.323-0.229-6.568-0.491-9.821l-0.212-2.593l-2.213,1.374c-30.871,19.146-80.885,27.71-116.754,27.71 c-34.85,0-83.895-8.214-114.902-26.568l-2.259-0.59l-0.188,2.554c-0.192,2.632-0.384,5.256-0.357,8.23l1.632,8.649 C123.466,200.923,116.738,215.876,116.738,231.551z"></path>
+                <path class="st0"
+                      d="M356.151,381.077c-9.635-5.97-18.734-11.607-26.102-17.43l-0.937-0.738l-0.972,0.691 c-6.887,4.914-31.204,30.17-51.023,51.172l-10.945-21.273l5.697-4.076v-20.854h-40.07v20.854l5.697,4.076l-10.949,21.281 c-19.825-21.009-44.154-46.265-51.034-51.18l-0.973-0.691l-0.937,0.738c-7.368,5.823-16.469,11.46-26.102,17.43 c-30.029,18.61-64.062,39.697-64.062,77.344c0,22.244,52.241,53.579,168.388,53.579c116.146,0,168.388-31.335,168.388-53.579 C420.213,420.774,386.178,399.687,356.151,381.077z"></path>
+                <path class="st0"
+                      d="M131.67,131.824c0,18.649,56.118,42.306,119.188,42.306s119.188-23.656,119.188-42.306v-25.706l43.503-17.702 v55.962c-5.068,0.792-8.964,5.186-8.964,10.45c0,4.503,2.966,8.432,7.242,9.852l-8.653,57.111h40.704l-8.651-57.111 c4.27-1.421,7.232-5.35,7.232-9.852c0-5.295-3.919-9.697-9.014-10.466l-0.21-67.197c0.357-0.621,0.357-1.266,0.357-1.607 c0-0.342,0-0.978-0.149-0.978h-0.002c-0.262-2.446-2.011-4.612-4.56-5.652l-11.526-4.72L267.551,3.238 C262.361,1.118,256.59,0,250.858,0s-11.502,1.118-16.69,3.238L72.834,68.936c-2.863,1.172-4.713,3.773-4.713,6.622 c0,2.842,1.848,5.443,4.716,6.63l58.833,23.928V131.824z"></path>
+                      </g>
+                    </g>
+                  </svg>
+              </span>
+              <span class="ml-2 text-sm tracking-wide truncate">دانشجویان</span>
+            </div>
+            <svg id="studentNavIcon"
+                 class="w-6 h-6 ml-5 rotate-[180] transition-all duration-500"
+                 viewBox="0 0 24 24"
+                 fill="none"
+                 xmlns="http://www.w3.org/2000/svg"
+                 transform="rotate(180)">
+              <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+              <g id="SVGRepo_tracerCarrier"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"></g>
+              <g id="SVGRepo_iconCarrier">
+                <path d="M5.70711 9.71069C5.31658 10.1012 5.31658 10.7344 5.70711 11.1249L10.5993 16.0123C11.3805 16.7927 12.6463 16.7924 13.4271 16.0117L18.3174 11.1213C18.708 10.7308 18.708 10.0976 18.3174 9.70708C17.9269 9.31655 17.2937 9.31655 16.9032 9.70708L12.7176 13.8927C12.3271 14.2833 11.6939 14.2832 11.3034 13.8927L7.12132 9.71069C6.7308 9.32016 6.09763 9.32016 5.70711 9.71069Z"
+                      fill="#374151"></path>
+              </g>
+            </svg>
+          </div>
+
+          <ul id="studentNav" class="hidden bg-gray-50">
+            <li>
+              <a href="#"
+                 class="relative flex flex-row items-center h-11 focus:outline-none hover:bg-gray-100 text-gray-600 hover:text-gray-800 border-r-4 border-indigo-400 pr-6">
+                <span class="inline-flex justify-center items-center ml-4">
+                  <svg class="w-5 h-5"
+                       fill="none"
+                       stroke="currentColor"
+                       viewBox="0 0 24 24"
+                       xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                  </svg>
+                </span>
+                <span class="ml-2 text-sm tracking-wide truncate">Profile</span>
+              </a>
+            </li>
+          </ul>
+        </li>
+
+        <li>
+          <a href="#"
+             class="relative flex flex-row items-center justify-between h-11 focus:outline-none hover:bg-gray-50 text-gray-600 hover:text-gray-800 border-r-4 border-transparent hover:border-indigo-500 pr-6">
+            <div class="flex items-center gap-2">
+              <span class="inline-flex justify-center items-center">
+                <svg class="w-5 h-5"
+                     viewBox="0 0 24 24"
+                     fill="none"
+                     xmlns="http://www.w3.org/2000/svg">
+                  <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                  <g id="SVGRepo_tracerCarrier"
+                     stroke-linecap="round"
+                     stroke-linejoin="round"></g>
+                  <g id="SVGRepo_iconCarrier">
+                    <path d="M21.2799 6.40005L11.7399 15.94C10.7899 16.89 7.96987 17.33 7.33987 16.7C6.70987 16.07 7.13987 13.25 8.08987 12.3L17.6399 2.75002C17.8754 2.49308 18.1605 2.28654 18.4781 2.14284C18.7956 1.99914 19.139 1.92124 19.4875 1.9139C19.8359 1.90657 20.1823 1.96991 20.5056 2.10012C20.8289 2.23033 21.1225 2.42473 21.3686 2.67153C21.6147 2.91833 21.8083 3.21243 21.9376 3.53609C22.0669 3.85976 22.1294 4.20626 22.1211 4.55471C22.1128 4.90316 22.0339 5.24635 21.8894 5.5635C21.7448 5.88065 21.5375 6.16524 21.2799 6.40005V6.40005Z"
+                          stroke="#374151"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"></path>
+                    <path d="M11 4H6C4.93913 4 3.92178 4.42142 3.17163 5.17157C2.42149 5.92172 2 6.93913 2 8V18C2 19.0609 2.42149 20.0783 3.17163 20.8284C3.92178 21.5786 4.93913 22 6 22H17C19.21 22 20 20.2 20 18V13"
+                          stroke="#374151"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"></path>
+                  </g>
+                </svg>
+              </span>
+              <span class="text-sm tracking-wide truncate">ویرایش حساب</span>
+            </div>
+          </a>
+        </li>
+
+        <li>
+          <a href="#"
+             class="relative flex flex-row items-center justify-between h-11 focus:outline-none hover:bg-gray-50 text-gray-600 hover:text-gray-800 border-r-4 border-transparent hover:border-indigo-500 pr-6">
+            <div class="flex items-center gap-2">
+              <span class="inline-flex justify-center items-center">
+                <svg class="w-5 h-5"
+                     viewBox="0 0 24 24"
+                     fill="none"
+                     xmlns="http://www.w3.org/2000/svg">
+                  <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                  <g id="SVGRepo_tracerCarrier"
+                     stroke-linecap="round"
+                     stroke-linejoin="round"></g>
+                  <g id="SVGRepo_iconCarrier">
+                    <path d="M21.0667 5C21.6586 5.95805 22 7.08604 22 8.29344C22 11.7692 19.1708 14.5869 15.6807 14.5869C15.0439 14.5869 13.5939 14.4405 12.8885 13.8551L12.0067 14.7333C11.272 15.465 11.8598 15.465 12.1537 16.0505C12.1537 16.0505 12.8885 17.075 12.1537 18.0995C11.7128 18.6849 10.4783 19.5045 9.06754 18.0995L8.77362 18.3922C8.77362 18.3922 9.65538 19.4167 8.92058 20.4412C8.4797 21.0267 7.30403 21.6121 6.27531 20.5876C6.22633 20.6364 5.952 20.9096 5.2466 21.6121C4.54119 22.3146 3.67905 21.9048 3.33616 21.6121L2.45441 20.7339C1.63143 19.9143 2.1115 19.0264 2.45441 18.6849L10.0963 11.0743C10.0963 11.0743 9.3615 9.90338 9.3615 8.29344C9.3615 4.81767 12.1907 2 15.6807 2C16.4995 2 17.282 2.15509 18 2.43738"
+                          stroke="#374151"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"></path>
+                    <path d="M17.8851 8.29353C17.8851 9.50601 16.8982 10.4889 15.6807 10.4889C14.4633 10.4889 13.4763 9.50601 13.4763 8.29353C13.4763 7.08105 14.4633 6.09814 15.6807 6.09814C16.8982 6.09814 17.8851 7.08105 17.8851 8.29353Z"
+                          stroke="#374151"
+                          stroke-width="1.5"></path>
+                  </g>
+                </svg>
+              </span>
+              <span class="text-sm tracking-wide truncate">تغییر کلمه ی عبور</span>
+            </div>
+          </a>
+        </li>
+
+        <li>
+          <a asp-area="Panel"
+             asp-page="/Logout"
+             class="relative flex flex-row items-center justify-between h-11 focus:outline-none hover:bg-gray-50 text-gray-600 hover:text-gray-800 border-r-4 border-transparent hover:border-indigo-500 pr-6">
+            <div class="flex items-center gap-2">
+              <span class="inline-flex justify-center items-center">
+                <svg class="w-5 h-5"
+                     viewBox="0 0 24 24"
+                     fill="none"
+                     xmlns="http://www.w3.org/2000/svg">
+                  <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                  <g id="SVGRepo_tracerCarrier"
+                     stroke-linecap="round"
+                     stroke-linejoin="round"></g>
+                  <g id="SVGRepo_iconCarrier">
+                    <path d="M21 12L13 12"
+                          stroke="#374151"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"></path>
+                    <path d="M18 15L20.913 12.087V12.087C20.961 12.039 20.961 11.961 20.913 11.913V11.913L18 9"
+                          stroke="#374151"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"></path>
+                    <path d="M16 5V4.5V4.5C16 3.67157 15.3284 3 14.5 3H5C3.89543 3 3 3.89543 3 5V19C3 20.1046 3.89543 21 5 21H14.5C15.3284 21 16 20.3284 16 19.5V19.5V19"
+                          stroke="#374151"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"></path>
+                  </g>
+                </svg>
+              </span>
+              <span class="text-sm tracking-wide truncate">خروج از حساب</span>
+            </div>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </aside>
+
+  <main class="mt-20 md:mr-[280px] p-4 md:p-8">
+    @RenderBody()
+  </main>
+
+  @if (ViewData["SuccessNotif"] != null)
+  {
+    <div id="successNotification" class="fixed bottom-4 right-4 flex w-full max-w-sm overflow-hidden bg-white rounded-lg shadow-md opacity-100 transition-opacity duration-500 z-[80] border border-emerald-500">
+      <div class="flex items-center justify-center w-12 bg-emerald-500">
+        <svg class="w-6 h-6 text-white fill-current" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+          <path d="M20 3.33331C10.8 3.33331 3.33337 10.8 3.33337 20C3.33337 29.2 10.8 36.6666 20 36.6666C29.2 36.6666 36.6667 29.2 36.6667 20C36.6667 10.8 29.2 3.33331 20 3.33331ZM16.6667 28.3333L8.33337 20L10.6834 17.65L16.6667 23.6166L29.3167 10.9666L31.6667 13.3333L16.6667 28.3333Z" />
+        </svg>
+      </div>
+
+      <div class="px-4 py-2 -mx-3">
+        <div class="mx-3">
+          <span class="font-semibold text-emerald-500">موفقیت آمیز</span>
+          <p class="text-sm text-gray-600">@ViewData["SuccessNotif"]</p>
+        </div>
+      </div>
+    </div>
+  }
+
+  @if (ViewData["FailureNotif"] != null)
+  {
+    <div id="failureNotification" class="fixed bottom-4 right-4 flex w-full max-w-sm overflow-hidden bg-white rounded-lg shadow-md z-[80] border border-red-500">
+      <div class="flex items-center justify-center w-12 bg-red-500">
+        <svg class="w-6 h-6 text-white fill-current" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+          <path d="M20 3.36667C10.8167 3.36667 3.3667 10.8167 3.3667 20C3.3667 29.1833 10.8167 36.6333 20 36.6333C29.1834 36.6333 36.6334 29.1833 36.6334 20C36.6334 10.8167 29.1834 3.36667 20 3.36667ZM19.1334 33.3333V22.9H13.3334L21.6667 6.66667V17.1H27.25L19.1334 33.3333Z" />
+        </svg>
+      </div>
+
+      <div class="px-4 py-2 -mx-3">
+        <div class="mx-3">
+          <span class="font-semibold text-red-500">خطا</span>
+          <p class="text-sm text-gray-600">
+            @ViewData["FailureNotif"]
+          </p>
+        </div>
+      </div>
+    </div>
+  }
+
+  <script src="~/lib/jquery/dist/jquery.min.js"></script>
+  <partial name="_ValidationScriptsPartial" />
+  <!--Datatables -->
+  <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+  <script src="~/js/site.js" asp-append-version="true"></script>
+
+  @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

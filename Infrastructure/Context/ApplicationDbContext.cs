@@ -13,6 +13,8 @@ namespace Infrastructure.Context
     public DbSet<User> Users { get; set; }
     public DbSet<Course> Courses { get; set; }
     public DbSet<UserCourse> UserCourses { get; set; }
+    public DbSet<HomeWork> HomeWorks { get; set; }
+    public DbSet<HomeWorkAnswer> HomeWorkAnswers { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

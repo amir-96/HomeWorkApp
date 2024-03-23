@@ -37,11 +37,23 @@ namespace Infrastructure.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("character varying(500)");
 
+                    b.Property<DateOnly>("EndDate")
+                        .HasColumnType("date");
+
+                    b.Property<string>("Image")
+                        .HasColumnType("text");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
 
+                    b.Property<DateOnly>("StartDate")
+                        .HasColumnType("date");
+
                     b.Property<long>("TeacherId")
                         .HasColumnType("bigint");
+
+                    b.Property<int>("TimeSpan")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -61,13 +73,98 @@ namespace Infrastructure.Migrations
                         new
                         {
                             Id = 1L,
-                            CreatedAt = new DateTime(2024, 3, 22, 1, 45, 8, 642, DateTimeKind.Utc).AddTicks(8439),
+                            CreatedAt = new DateTime(2024, 3, 22, 20, 28, 40, 498, DateTimeKind.Utc).AddTicks(6049),
                             Description = "دوره ی پایتون مقدماتی. بهترین دوره برای شروع برنامه نویسی.",
+                            EndDate = new DateOnly(2024, 5, 21),
+                            Image = "default.jpg",
                             IsActive = true,
+                            StartDate = new DateOnly(2024, 3, 22),
                             TeacherId = 1L,
+                            TimeSpan = 60,
                             Title = "پایتون مقدماتی",
-                            UpdatedAt = new DateTime(2024, 3, 22, 1, 45, 8, 642, DateTimeKind.Utc).AddTicks(8442)
+                            UpdatedAt = new DateTime(2024, 3, 22, 20, 28, 40, 498, DateTimeKind.Utc).AddTicks(6053)
                         });
+                });
+
+            modelBuilder.Entity("Domain.Models.HomeWork", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<long>("CourseId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<DateOnly>("EndDate")
+                        .HasColumnType("date");
+
+                    b.Property<string>("Image")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateOnly>("StartDate")
+                        .HasColumnType("date");
+
+                    b.Property<int>("TimeSpan")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CourseId");
+
+                    b.ToTable("HomeWorks");
+                });
+
+            modelBuilder.Entity("Domain.Models.HomeWorkAnswer", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<string>("File")
+                        .HasColumnType("text");
+
+                    b.Property<long>("HomeWorkId")
+                        .HasColumnType("bigint");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("Score")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("HomeWorkId");
+
+                    b.ToTable("HomeWorkAnswers");
                 });
 
             modelBuilder.Entity("Domain.Models.User", b =>
@@ -86,6 +183,9 @@ namespace Infrastructure.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)");
 
+                    b.Property<string>("FirstName")
+                        .HasColumnType("text");
+
                     b.Property<string>("HashedPassword")
                         .IsRequired()
                         .HasMaxLength(500)
@@ -98,6 +198,12 @@ namespace Infrastructure.Migrations
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("text");
 
                     b.Property<string>("Role")
                         .IsRequired()
@@ -126,13 +232,16 @@ namespace Infrastructure.Migrations
                         new
                         {
                             Id = 1L,
-                            CreatedAt = new DateTime(2024, 3, 22, 1, 45, 8, 471, DateTimeKind.Utc).AddTicks(4052),
+                            CreatedAt = new DateTime(2024, 3, 22, 20, 28, 40, 384, DateTimeKind.Utc).AddTicks(6698),
                             Email = "amirjob75@gmail.com",
-                            HashedPassword = "$2a$11$BbLU8ROBKMgTbpYo5wMTMOOvmhebBy2V1zJv1F5lXeD9D9p4y0rJS",
+                            FirstName = "امیر",
+                            HashedPassword = "$2a$11$gYmPdkfik9QlklIFGgyVR.PMLRKm1z16JXDxlyBHSKjlhmcs9cXjy",
                             Image = "default.jpg",
                             IsActive = true,
+                            LastName = "حسینی",
+                            PhoneNumber = "09163097345",
                             Role = "Admin",
-                            UpdatedAt = new DateTime(2024, 3, 22, 1, 45, 8, 471, DateTimeKind.Utc).AddTicks(4054),
+                            UpdatedAt = new DateTime(2024, 3, 22, 20, 28, 40, 384, DateTimeKind.Utc).AddTicks(6700),
                             UserName = "amir"
                         });
                 });
@@ -179,6 +288,28 @@ namespace Infrastructure.Migrations
                     b.Navigation("Teacher");
                 });
 
+            modelBuilder.Entity("Domain.Models.HomeWork", b =>
+                {
+                    b.HasOne("Domain.Models.Course", "Course")
+                        .WithMany("HomeWorks")
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Course");
+                });
+
+            modelBuilder.Entity("Domain.Models.HomeWorkAnswer", b =>
+                {
+                    b.HasOne("Domain.Models.HomeWork", "HomeWork")
+                        .WithMany("HomeWorkAnswers")
+                        .HasForeignKey("HomeWorkId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("HomeWork");
+                });
+
             modelBuilder.Entity("Domain.Models.UserCourse", b =>
                 {
                     b.HasOne("Domain.Models.Course", "Course")
@@ -200,7 +331,14 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Models.Course", b =>
                 {
+                    b.Navigation("HomeWorks");
+
                     b.Navigation("UserCourses");
+                });
+
+            modelBuilder.Entity("Domain.Models.HomeWork", b =>
+                {
+                    b.Navigation("HomeWorkAnswers");
                 });
 
             modelBuilder.Entity("Domain.Models.User", b =>

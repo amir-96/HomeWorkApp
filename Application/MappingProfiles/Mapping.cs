@@ -1,4 +1,5 @@
-﻿using Application.ViewModels.User;
+﻿using Application.ViewModels.Course;
+using Application.ViewModels.User;
 using AutoMapper;
 using Domain.Models;
 
@@ -9,6 +10,7 @@ namespace Application.MappingProfiles
     public Mapping()
     {
       CreateMap<CreateUserDTO, User>();
+      CreateMap<CreateCourseDTO, Course>();
     }
   }
 }

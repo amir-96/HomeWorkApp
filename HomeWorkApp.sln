@@ -13,9 +13,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastru
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{24C8FAB3-96E7-424F-9013-7037C188E063}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UI.Server", "UI\UI.Server\UI.Server.csproj", "{DF848868-CD7B-49E6-8FCD-7A3D0E0ACA7B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UI.Server", "UI\UI.Server\UI.Server.csproj", "{DF848868-CD7B-49E6-8FCD-7A3D0E0ACA7B}"
 EndProject
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "ui.client", "UI\ui.client\ui.client.esproj", "{22A61C4A-BF48-44DA-8627-35891F1C17FE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceHost", "ServiceHost\ServiceHost.csproj", "{F60AEA07-7733-4748-BA33-19363A8842FD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{22A61C4A-BF48-44DA-8627-35891F1C17FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{22A61C4A-BF48-44DA-8627-35891F1C17FE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{22A61C4A-BF48-44DA-8627-35891F1C17FE}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{F60AEA07-7733-4748-BA33-19363A8842FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F60AEA07-7733-4748-BA33-19363A8842FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F60AEA07-7733-4748-BA33-19363A8842FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F60AEA07-7733-4748-BA33-19363A8842FD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -28,6 +28,7 @@ namespace Infrastructure.Mapping
             Title = "پایتون مقدماتی",
             Description = "دوره ی پایتون مقدماتی. بهترین دوره برای شروع برنامه نویسی.",
             TeacherId = 1,
+            Image = "default.jpg"
           }
       );
     }

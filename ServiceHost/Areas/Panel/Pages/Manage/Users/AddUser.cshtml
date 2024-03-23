@@ -1,0 +1,76 @@
+﻿@page
+@using Domain.BaseModels
+@model ServiceHost.Areas.Panel.Pages.Manage.Users.AddUserModel
+@{
+  ViewData["Title"] = "افزودن کاربر جدید";
+}
+
+<section class="relative w-full p-6 mx-auto bg-white rounded-md shadow-md">
+  <a asp-area="Panel" asp-page="/Manage/Users/Index">
+    <svg class="absolute left-4 top-4" height="40px" width="40px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 487.622 487.622" xml:space="preserve" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <g> <circle style="fill:#EED26A;" cx="243.811" cy="243.811" r="243.811"></circle> <circle style="fill:#D97077;" cx="243.811" cy="243.811" r="243.811"></circle> <path style="fill:#CA6168;" d="M487.622,243.811c0-4.875-0.16-9.711-0.441-14.516l-129.826-93.017l-131.876,93.094L199.87,351.343 l154.131,110.005C433.285,421.108,487.622,338.807,487.622,243.811z"></path> <polygon style="fill:#FFFFFF;" points="199.869,351.343 357.354,351.343 276.415,243.811 357.354,136.279 199.869,136.279 118.931,243.811 "></polygon> </g> </g> </g></svg>
+  </a>
+
+  <h2 class="text-lg font-semibold text-gray-700 capitalize">افزودن کاربر جدید</h2>
+
+  <div asp-validation-summary="ModelOnly" class="text-sm font-semibold text-red-500"></div>
+
+  <form asp-page-handler="CreateUser" method="post">
+    <div class="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-2">
+      <div>
+        <label asp-for="CreateUserDTO.UserName" class="text-gray-700">نام کاربری</label>
+        <input asp-for="CreateUserDTO.UserName" aria-required="true" class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring">
+        <span asp-validation-for="CreateUserDTO.UserName" class="text-sm font-semibold text-red-500"></span>
+      </div>
+
+      <div>
+        <label asp-for="CreateUserDTO.Email" class="text-gray-700">ایمیل</label>
+        <input asp-for="CreateUserDTO.Email" aria-required="true" type="email" class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring">
+        <span asp-validation-for="CreateUserDTO.Email" class="text-sm font-semibold text-red-500"></span>
+      </div>
+
+      <div>
+        <label asp-for="CreateUserDTO.Password" class="text-gray-700">کلمه ی عبور</label>
+        <input asp-for="CreateUserDTO.Password" aria-required="true" class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring">
+        <span asp-validation-for="CreateUserDTO.Password" class="text-sm font-semibold text-red-500"></span>
+      </div>
+
+      <div>
+        <label asp-for="CreateUserDTO.PasswordConfirmation" class="text-gray-700">تکرار کلمه ی عبور</label>
+        <input asp-for="CreateUserDTO.PasswordConfirmation" aria-required="true" class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring">
+        <span asp-validation-for="CreateUserDTO.PasswordConfirmation" class="text-sm font-semibold text-red-500"></span>
+      </div>
+
+      <div>
+        <label asp-for="CreateUserDTO.FirstName" class="text-gray-700">نام</label>
+        <input asp-for="CreateUserDTO.FirstName" aria-required="true" class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring">
+        <span asp-validation-for="CreateUserDTO.FirstName" class="text-sm font-semibold text-red-500"></span>
+      </div>
+
+      <div>
+        <label asp-for="CreateUserDTO.LastName" class="text-gray-700">نام خانوادگی</label>
+        <input asp-for="CreateUserDTO.LastName" aria-required="true" class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring">
+        <span asp-validation-for="CreateUserDTO.LastName" class="text-sm font-semibold text-red-500"></span>
+      </div>
+
+      <div>
+        <label asp-for="CreateUserDTO.PhoneNumber" class="text-gray-700">شماره تماس</label>
+        <input asp-for="CreateUserDTO.PhoneNumber" aria-required="true" class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring">
+        <span asp-validation-for="CreateUserDTO.PhoneNumber" class="text-sm font-semibold text-red-500"></span>
+      </div>
+
+      <div>
+        <label asp-for="CreateUserDTO.Role" class="text-gray-700">نقش</label>
+        <select asp-for="CreateUserDTO.Role" aria-required="true" class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring">
+          <option value="@Roles.Student" selected>دانشجو</option>
+          <option value="@Roles.Teacher">استاد</option>
+          <option value="@Roles.Admin">مدیر</option>
+        </select>
+        <span asp-validation-for="CreateUserDTO.Role" class="text-sm font-semibold text-red-500"></span>
+      </div>
+    </div>
+
+    <div class="flex justify-end mt-6">
+      <button class="px-8 py-2.5 w-full leading-5 text-white transition-colors duration-300 transform bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:bg-gray-600">افزودن کاربر</button>
+    </div>
+  </form>
+</section>
