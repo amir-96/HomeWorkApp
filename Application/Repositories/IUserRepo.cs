@@ -9,5 +9,6 @@ namespace Application.Repositories
   {
     Task<bool> ChangeImage(ChangeImageDTO changeImageDTO);
     Task<ServerResponse<bool>> ChangePassword(ChangePasswordDTO changePasswordDTO);
+    Task<ServerResponse<bool>> AdminChangePassword(AdminChangePasswordDTO adminChangePasswordDTO);
   }
 }

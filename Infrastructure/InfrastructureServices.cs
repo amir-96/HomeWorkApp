@@ -15,8 +15,10 @@ namespace Infrastructure
 
       services.AddTransient<IUserRepo, UserRepo>();
       services.AddTransient<IAuthRepo, AuthRepo>();
+      services.AddTransient<IGoogleRecaptcha, GoogleRecaptcha>();
       services.AddTransient<ICourseRepo, CourseRepo>();
       services.AddTransient<IPasswordRepo, PasswordRepo>();
+      services.AddTransient<ILogRepo, LogRepo>();
 
       services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
         .AddCookie(options =>
@@ -24,7 +26,7 @@ namespace Infrastructure
           options.ExpireTimeSpan = TimeSpan.FromHours(2);
           options.SlidingExpiration = true;
           options.LoginPath = "/Panel/Login";
-          options.AccessDeniedPath = "/Panel/AccessDenied";
+          options.AccessDeniedPath = "/AccessDenied";
         });
 
       services.AddDbContext<ApplicationDbContext>(opt =>

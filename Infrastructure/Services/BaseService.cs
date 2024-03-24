@@ -22,6 +22,7 @@ namespace Infrastructure.Services
       try
       {
         var data = await _context.Set<T>()
+          .Where(x => x.IsActive == true)
           .ToListAsync();
 
         var response = new ServerResponse<List<T>>(true, "عملیات با موفقیت انجام شد", data);
@@ -53,7 +54,7 @@ namespace Infrastructure.Services
       {
         var data = await _context.FindAsync<T>(id);
 
-        if (data == null)
+        if (data == null || data.IsActive == false)
         {
           var failureResponse = new ServerResponse<T>(false, "هیچ اطلاعاتی با این مشخصات پیدا نشد", null);
 
@@ -155,7 +156,7 @@ namespace Infrastructure.Services
     {
       try
       {
-        var data = await _context.Set<T>().AnyAsync(expression);
+        var data = await _context.Set<T>().Where(x => x.IsActive == true).AnyAsync(expression);
 
         var response = new ServerResponse<bool>(true, "عملیات با موفقیت انجام شد", data);
 

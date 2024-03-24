@@ -46,7 +46,7 @@ namespace Infrastructure.Mapping
             FirstName = "امیر",
             LastName = "حسینی",
             Role = Roles.Admin,
-            Image = "default.jpg"
+            Image = "default.png"
           }
       );
     }

@@ -5,7 +5,6 @@ using Infrastructure.Context;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Authentication;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using AuthenticationProperties = Microsoft.AspNetCore.Authentication.AuthenticationProperties;
@@ -29,7 +28,7 @@ namespace Infrastructure.Services
     {
       try
       {
-        var user = await _context.Users.SingleOrDefaultAsync(u => u.UserName == loginDTO.UserNameOrEmail || u.Email == loginDTO.UserNameOrEmail);
+        var user = await _context.Users.Where(u => u.IsActive == true).SingleOrDefaultAsync(u => u.UserName == loginDTO.UserNameOrEmail || u.Email == loginDTO.UserNameOrEmail);
 
         if (user == null)
         {
@@ -45,6 +44,7 @@ namespace Infrastructure.Services
 
         var claims = new List<Claim>
         {
+            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
             new Claim(ClaimTypes.Name, user.UserName),
             new Claim("FullName", user.FirstName + " " + user.LastName),
             new Claim(ClaimTypes.Role, user.Role),

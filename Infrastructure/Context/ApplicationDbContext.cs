@@ -1,4 +1,5 @@
-﻿using Domain.Models;
+﻿using Domain.BaseModels;
+using Domain.Models;
 using Infrastructure.Mapping;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,6 +16,7 @@ namespace Infrastructure.Context
     public DbSet<UserCourse> UserCourses { get; set; }
     public DbSet<HomeWork> HomeWorks { get; set; }
     public DbSet<HomeWorkAnswer> HomeWorkAnswers { get; set; }
+    public DbSet<SystemLog> SystemLogs { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

@@ -29,6 +29,8 @@ if (!app.Environment.IsDevelopment())
 
 app.UseCookiePolicy(cookiePolicyOptions);
 
+app.UseStatusCodePagesWithReExecute("/404");
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 

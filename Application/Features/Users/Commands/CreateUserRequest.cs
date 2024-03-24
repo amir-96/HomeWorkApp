@@ -21,11 +21,13 @@ namespace Application.Features.Users.Commands
   {
     private readonly IUserRepo _userRepo;
     private readonly IMapper _mapper;
+    private readonly ILogRepo _logRepo;
 
-    public CreateUserRequestHandler(IUserRepo userRepo, IMapper mapper)
+    public CreateUserRequestHandler(IUserRepo userRepo, IMapper mapper, ILogRepo logRepo)
     {
       _userRepo = userRepo;
       _mapper = mapper;
+      _logRepo = logRepo;
     }
 
     public async Task<ServerResponse<bool>> Handle(CreateUserRequest request, CancellationToken cancellationToken)
@@ -47,6 +49,8 @@ namespace Application.Features.Users.Commands
       {
         return new ServerResponse<bool>(false, "خطای سرور", false);
       }
+
+      await _logRepo.CreateLog($"کاربر {user.UserName} ایجاد شد");
 
       return response;
     }

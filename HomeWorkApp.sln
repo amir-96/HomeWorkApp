@@ -17,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UI.Server", "UI\UI.Server\U
 EndProject
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "ui.client", "UI\ui.client\ui.client.esproj", "{22A61C4A-BF48-44DA-8627-35891F1C17FE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceHost", "ServiceHost\ServiceHost.csproj", "{F60AEA07-7733-4748-BA33-19363A8842FD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServiceHost", "ServiceHost\ServiceHost.csproj", "{F60AEA07-7733-4748-BA33-19363A8842FD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

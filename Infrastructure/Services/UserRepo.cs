@@ -94,6 +94,47 @@ namespace Infrastructure.Services
       }
     }
 
+    public async Task<ServerResponse<bool>> AdminChangePassword(AdminChangePasswordDTO adminChangePasswordDTO)
+    {
+      try
+      {
+        var adminResponse = await Exists(u => u.Id == adminChangePasswordDTO.AdminId && u.Role == Roles.Admin);
+
+        var userResponse = await Get(adminChangePasswordDTO.UserId);
+
+        if (adminResponse == null || userResponse == null || userResponse.Data == null)
+        {
+          return new ServerResponse<bool>(false, "کاربر با این مشخصات پیدا نشد", false);
+        }
+
+        if (adminResponse.Data == false)
+        {
+          return new ServerResponse<bool>(false, "شما مدیر نیستید", false);
+        }
+
+        userResponse.Data.HashedPassword = _passwordRepo.HashPassword("reset12345");
+
+        await Update(userResponse.Data.Id, userResponse.Data);
+
+        var response = new ServerResponse<bool>(true, "کلمه ی عبور تنظیم مجدد شد", true);
+
+        return response;
+      }
+      catch (Exception ex)
+      {
+        string errorMessage = "عملیات با خطا مواجه شد : " + ex.Message;
+
+        if (ex.InnerException != null)
+        {
+          errorMessage += " | Inner Error: " + ex.InnerException.Message;
+        }
+
+        var response = new ServerResponse<bool>(false, errorMessage, false);
+
+        return response;
+      }
+    }
+
     private bool IsValidImageUrl(string imageUrl)
     {
       // Define a regular expression pattern to match common image extensions

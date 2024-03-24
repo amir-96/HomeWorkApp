@@ -46,16 +46,24 @@ function toggleStudent() {
 
 setTimeout(function () {
   var successNotification = document.getElementById('successNotification');
-  successNotification.style.opacity = '0';
+  if (successNotification) {
+    successNotification.style.opacity = '0';
+  }
   setTimeout(function () {
-    successNotification.style.display = 'none';
+    if (successNotification) {
+      successNotification.style.display = 'none';
+    }
   }, 500);
 }, 4000);
 
 setTimeout(function () {
   var failureNotification = document.getElementById('failureNotification');
-  failureNotification.style.opacity = '0';
+  if (failureNotification) {
+    failureNotification.style.opacity = '0';
+  }
   setTimeout(function () {
-    failureNotification.style.display = 'none';
+    if (failureNotification) {
+      failureNotification.style.display = 'none';
+    }
   }, 500);
 }, 4000);

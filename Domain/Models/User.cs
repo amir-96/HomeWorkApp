@@ -19,7 +19,7 @@ namespace Domain.Models
     public User()
     {
       IsActive = true;
-      Image = "default.jpg";
+      Image = "default.png";
     }
   }
 }

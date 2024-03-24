@@ -38,9 +38,12 @@ namespace Application.Features.Users.Commands
         return new ServerResponse<bool>(false, "کاربر با این نام کاربری یا ایمیل وجود دارد", false);
       }
 
-      oldUserResponse.Data.UserName = request.EditUserDTO.UserName;
-      oldUserResponse.Data.Email = request.EditUserDTO.Email;
-      oldUserResponse.Data.Role = request.EditUserDTO.Role;
+      oldUserResponse.Data.UserName = editedUser.UserName;
+      oldUserResponse.Data.Email = editedUser.Email;
+      oldUserResponse.Data.PhoneNumber = editedUser.PhoneNumber;
+      oldUserResponse.Data.FirstName = editedUser.FirstName;
+      oldUserResponse.Data.LastName = editedUser.LastName;
+      oldUserResponse.Data.Role = editedUser.Role;
       oldUserResponse.Data.UpdatedAt = DateTime.UtcNow;
 
       var response = await _userRepo.Update(oldUserResponse.Data.Id, oldUserResponse.Data);
