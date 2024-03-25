@@ -74,7 +74,7 @@ namespace Infrastructure.Services
 
         if (courseResponse == null)
         {
-          return new ServerResponse<List<User>> (false, "دوره با این مشخصات پیدا نشد", null);
+          return new ServerResponse<List<User>>(false, "دوره با این مشخصات پیدا نشد", null);
         }
 
         var courseUsers = courseResponse.Users.ToList();
@@ -90,7 +90,46 @@ namespace Infrastructure.Services
           errorMessage += " | Inner Error: " + ex.InnerException.Message;
         }
 
-        var response = new ServerResponse<List<User>> (false, errorMessage, null);
+        var response = new ServerResponse<List<User>>(false, errorMessage, null);
+
+        return response;
+      }
+    }
+
+    public async Task<ServerResponse<CourseTableDTO>> GetCourseTable(long courseId)
+    {
+      try
+      {
+        var course = await _context.Courses
+          .Where(c => c.IsActive == true && c.Id == courseId)
+          .Include(c => c.Teacher)
+          .Include(c => c.Users)
+          .SingleOrDefaultAsync();
+
+        if (course == null)
+        {
+          return new ServerResponse<CourseTableDTO>(false, "دوره ای پیدا نشد", null);
+        }
+
+        var courseTable = new CourseTableDTO()
+        {
+          Course = course,
+          Teacher = course.Teacher,
+          Students = course.Users.ToList()
+        };
+
+        return new ServerResponse<CourseTableDTO>(true, "دوره با موفقیت دریافت شد", courseTable);
+      }
+      catch (Exception ex)
+      {
+        string errorMessage = "عملیات با خطا مواجه شد : " + ex.Message;
+
+        if (ex.InnerException != null)
+        {
+          errorMessage += " | Inner Error: " + ex.InnerException.Message;
+        }
+
+        var response = new ServerResponse<CourseTableDTO>(false, errorMessage, null);
 
         return response;
       }

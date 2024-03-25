@@ -1,13 +1,11 @@
 ﻿@page
-@using Domain.BaseModels
-@model ServiceHost.Areas.Panel.Pages.Manage.Courses.AddCourseModel
+@model ServiceHost.Areas.Panel.Pages.Manage.Courses.EditCourseModel
 @{
-  ViewData["Title"] = "افزودن دوره ی جدید";
+  ViewData["Title"] = "ویرایش دوره";
 }
 
 @section Styles {
   <link rel="stylesheet" href="@Html.Raw("https://unpkg.com/@majidh1/jalalidatepicker/dist/jalalidatepicker.min.css")">
-  <link href="https://cdn.jsdelivr.net/npm/quill@2.0.0-rc.4/dist/quill.snow.css" rel="stylesheet" />
 }
 
 <section class="relative w-full p-6 mx-auto bg-white rounded-md shadow-md">
@@ -15,16 +13,23 @@
     <svg class="absolute left-4 top-4" height="40px" width="40px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 487.622 487.622" xml:space="preserve" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <g> <circle style="fill:#EED26A;" cx="243.811" cy="243.811" r="243.811"></circle> <circle style="fill:#D97077;" cx="243.811" cy="243.811" r="243.811"></circle> <path style="fill:#CA6168;" d="M487.622,243.811c0-4.875-0.16-9.711-0.441-14.516l-129.826-93.017l-131.876,93.094L199.87,351.343 l154.131,110.005C433.285,421.108,487.622,338.807,487.622,243.811z"></path> <polygon style="fill:#FFFFFF;" points="199.869,351.343 357.354,351.343 276.415,243.811 357.354,136.279 199.869,136.279 118.931,243.811 "></polygon> </g> </g> </g></svg>
   </a>
 
-  <h2 class="text-lg font-semibold text-gray-700 capitalize">افزودن دوره ی جدید</h2>
+  <h2 class="text-lg font-semibold text-gray-700 capitalize">ویرایش دوره</h2>
 
   <div asp-validation-summary="ModelOnly" class="text-sm font-semibold text-red-500"></div>
 
-  <form asp-page-handler="CreateCourse" method="post" enctype="multipart/form-data">
+  <form asp-page-handler="EditCourse" method="post" enctype="multipart/form-data">
 
     <div class="flex flex-col justify-center items-center justify-center space-x-6 my-8 mx-auto">
       <div class="flex flex-col items-center justify-center gap-4 mx-auto">
         <div class="shrink-0">
-          <img id='preview_img' draggable="false" class="max-w-[80%] aspect-[5/3] object-cover border shadow-lg mx-auto rounded-lg" src="~/images/default.jpg" alt="Current profile photo" />
+          @if (Model.CurrentCourse.Image == null || Model.CurrentCourse.Image == "default.jpg")
+          {
+            <img id='preview_img' draggable="false" class="max-w-[80%] aspect-[5/3] object-cover border shadow-lg mx-auto rounded-lg" src="~/images/default.jpg" alt="Current profile photo" />
+          }
+          else
+          {
+            <img id='preview_img' draggable="false" class="max-w-[80%] aspect-[5/3] object-cover border shadow-lg mx-auto rounded-lg" src="~/images/CoursePhotos/@Model.CurrentCourse.Image" alt="Current profile photo" />
+          }
         </div>
         <label class="block w-fit mx-auto">
           <span class="sr-only">تصویر را انتخاب کنید</span>
@@ -42,64 +47,65 @@
     </div>
 
     <div class="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-2">
+      <input asp-for="editCourseDTO.Id" type="hidden" value="@Model.CurrentCourse.Id" />
+
       <div>
-        <label asp-for="createCourseDTO.Title" class="text-gray-700">نام دوره</label>
-        <input asp-for="createCourseDTO.Title" aria-required="true" class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring">
-        <span asp-validation-for="createCourseDTO.Title" class="text-sm font-semibold text-red-500"></span>
+        <label asp-for="editCourseDTO.Title" class="text-gray-700">نام دوره</label>
+        <input asp-for="editCourseDTO.Title" value="@Model.CurrentCourse.Title" aria-required="true" class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring">
+        <span asp-validation-for="editCourseDTO.Title" class="text-sm font-semibold text-red-500"></span>
       </div>
 
       <div>
-        <label asp-for="createCourseDTO.TeacherId" class="text-gray-700">استاد دوره</label>
-        <select asp-for="createCourseDTO.TeacherId" aria-required="true" class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring">
+        <label asp-for="editCourseDTO.TeacherId" class="text-gray-700">استاد دوره</label>
+        <select asp-for="editCourseDTO.TeacherId" aria-required="true" class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring">
           @foreach (var teacher in Model.Teachers)
           {
-            <option value="@teacher.Id">@teacher.FirstName @teacher.LastName</option>
+            <option value="@teacher.Id" selected="@(Model.CurrentCourse.TeacherId == teacher.Id)">@teacher.FirstName @teacher.LastName</option>
           }
         </select>
-        <span asp-validation-for="createCourseDTO.TeacherId" class="text-sm font-semibold text-red-500"></span>
+        <span asp-validation-for="editCourseDTO.TeacherId" class="text-sm font-semibold text-red-500"></span>
       </div>
 
       <div>
         <label asp-for="StartDate" class="text-gray-700">تاریخ شروع دوره</label>
-        <input data-jdp data-jdp-min-date="today" data-jdp-miladi-input="miladi_date" readonly aria-required="true" class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring">
+        <input data-jdp data-jdp-min-date="today" data-jdp-miladi-input="miladi_date" value="@Model.ToShamsi(Model.CurrentCourse.StartDate)" readonly aria-required="true" class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring">
         <input asp-for="StartDate" type="hidden" id="miladi_date" />
         <span asp-validation-for="StartDate" class="text-sm font-semibold text-red-500"></span>
       </div>
 
       <div>
-        <label asp-for="createCourseDTO.TimeSpan" class="text-gray-700">طول دوره(روز)</label>
-        <input asp-for="createCourseDTO.TimeSpan" type="number" aria-required="true" class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring">
-        <span asp-validation-for="createCourseDTO.TimeSpan" class="text-sm font-semibold text-red-500"></span>
+        <label asp-for="editCourseDTO.TimeSpan" class="text-gray-700">طول دوره(روز)</label>
+        <input asp-for="editCourseDTO.TimeSpan" value="@Model.CurrentCourse.TimeSpan" type="number" aria-required="true" class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring">
+        <span asp-validation-for="editCourseDTO.TimeSpan" class="text-sm font-semibold text-red-500"></span>
       </div>
 
       <div>
-        <label asp-for="createCourseDTO.Price" class="text-gray-700">هزینه ی دوره</label>
-        <input asp-for="createCourseDTO.Price" type="number" aria-required="true" class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring">
-        <span asp-validation-for="createCourseDTO.Price" class="text-sm font-semibold text-red-500"></span>
+        <label asp-for="editCourseDTO.Price" class="text-gray-700">هزینه ی دوره</label>
+        <input asp-for="editCourseDTO.Price" value="@Model.CurrentCourse.Price" type="number" aria-required="true" class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring">
+        <span asp-validation-for="editCourseDTO.Price" class="text-sm font-semibold text-red-500"></span>
       </div>
 
       <div>
-        <label asp-for="createCourseDTO.Capacity" class="text-gray-700">ظرفیت دوره</label>
-        <input asp-for="createCourseDTO.Capacity" type="number" aria-required="true" class="text-right block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring">
-        <span asp-validation-for="createCourseDTO.Capacity" class="text-sm font-semibold text-red-500"></span>
+        <label asp-for="editCourseDTO.Capacity" class="text-gray-700">ظرفیت دوره</label>
+        <input asp-for="editCourseDTO.Capacity" value="@Model.CurrentCourse.Capacity" type="number" aria-required="true" class="text-right block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring">
+        <span asp-validation-for="editCourseDTO.Capacity" class="text-sm font-semibold text-red-500"></span>
       </div>
 
       <div class="col-span-1 sm:col-span-2">
-        <label asp-for="createCourseDTO.Description" class="text-gray-700">توضیحات دوره</label>
-        <textarea asp-for="createCourseDTO.Description" id="myTextarea" aria-required="true" class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring"></textarea>
-        <span asp-validation-for="createCourseDTO.Description" class="text-sm font-semibold text-red-500"></span>
+        <label asp-for="editCourseDTO.Description" class="text-gray-700">توضیحات دوره</label>
+        <textarea asp-for="editCourseDTO.Description" id="myTextarea" aria-required="true" class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring"></textarea>
+        <span asp-validation-for="editCourseDTO.Description" class="text-sm font-semibold text-red-500"></span>
       </div>
     </div>
 
     <div class="flex justify-end mt-6">
-      <button class="px-8 py-2.5 w-full leading-5 text-white transition-colors duration-300 transform bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:bg-gray-600">افزودن دوره</button>
+      <button class="px-8 py-2.5 w-full leading-5 text-white transition-colors duration-300 transform bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:bg-gray-600">ویرایش دوره</button>
     </div>
   </form>
 </section>
 
 @section Scripts {
   <script type="text/javascript" src="@Html.Raw("https://unpkg.com/@majidh1/jalalidatepicker/dist/jalalidatepicker.min.js")"></script>
-
 
   <script>
     ClassicEditor
@@ -108,9 +114,17 @@
         direction: 'rtl',
         toolbarTitle: false
       })
+      .then(editor => {
+        editor.setData('@Html.Raw(Model.CurrentCourse.Description)');
+      })
       .catch(error => {
         console.error(error);
       });
+
+    var startDate = '@Model.CurrentCourse.StartDate';
+    var parts = startDate.split('/');
+    var formattedDate = parts[2] + '/' + ('0' + parts[0]).slice(-2) + '/' + ('0' + parts[1]).slice(-2);
+    document.getElementById("miladi_date").value = formattedDate;
 
     jalaliDatepicker.startWatch({
       hideAfterChange: false,

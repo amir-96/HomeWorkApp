@@ -1,4 +1,5 @@
-using Application.Features.Courses.Queries;
+﻿using Application.Features.Courses.Queries;
+using Application.Features.Users.Queries;
 using Application.ViewModels.Course;
 using Domain.BaseModels;
 using MediatR;
@@ -6,10 +7,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Globalization;
+using System.Security.Claims;
 
 namespace ServiceHost.Areas.Panel.Pages.Manage.Courses
 {
-  [Authorize(Roles = Roles.Admin)]
+  [Authorize(Roles = Roles.Admin + ", " + Roles.Teacher + ", " + Roles.Student)]
   public class IndexModel : PageModel
   {
     private readonly ISender _mediatrSender;
@@ -20,9 +22,18 @@ namespace ServiceHost.Areas.Panel.Pages.Manage.Courses
     }
 
     public List<CourseTableDTO> CourseTable { get; set; }
+    public bool IsTeacher { get; set; } = false;
+    public bool IsStudent { get; set; } = false;
 
-    public async Task<IActionResult> OnGet(string message = null, bool messageSuccess = false)
+    public async Task<IActionResult> OnGet(string message = null, bool messageSuccess = false, bool isTeacher = false, bool isStudent = false)
     {
+      var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+      if (userId == null)
+      {
+        return RedirectToPage("/Manage/Index", new { area = "Panel", message = "کاربر نامعتبر", messageSuccess = false });
+      }
+
       if (message != null)
       {
         if (messageSuccess)
@@ -35,11 +46,47 @@ namespace ServiceHost.Areas.Panel.Pages.Manage.Courses
         }
       }
 
+      var userResponse = await _mediatrSender.Send(new GetUserRequest(long.Parse(userId)));
+
+      if (userResponse.IsSucceeded == false)
+      {
+        return RedirectToPage("/Manage/Index", new { area = "Panel", message = "کاربر نامعتبر", messageSuccess = false });
+      }
+
       var courseResponse = await _mediatrSender.Send(new GetAllCoursesTableRequest());
 
       if (courseResponse.IsSucceeded)
       {
-        CourseTable = courseResponse.Data;
+        if (userResponse.Data.Role == Roles.Admin)
+        {
+          CourseTable = courseResponse.Data;
+        }
+        else if (userResponse.Data.Role == Roles.Teacher)
+        {
+          CourseTable = courseResponse.Data.Where(c => c.Teacher.Id == userResponse.Data.Id).ToList();
+          IsTeacher = true;
+        }
+        else if (userResponse.Data.Role == Roles.Student)
+        {
+          CourseTable = courseResponse.Data.Where(c => c.Students.Any(s => s.Id == userResponse.Data.Id)).ToList();
+          IsStudent = true;
+        }
+        else
+        {
+          return RedirectToPage("/Manage/Index", new { area = "Panel", message = "کاربر نامعتبر", messageSuccess = false });
+        }
+
+        if (isTeacher)
+        {
+          CourseTable = CourseTable.Where(c => c.Teacher.Id == userResponse.Data.Id).ToList();
+          IsTeacher = true;
+        }
+
+        if (isStudent)
+        {
+          CourseTable = CourseTable.Where(c => c.Students.Any(s => s.Id == userResponse.Data.Id)).ToList();
+          IsStudent = true;
+        }
 
         return Page();
       }

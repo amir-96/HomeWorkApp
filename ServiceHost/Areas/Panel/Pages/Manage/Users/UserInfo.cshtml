@@ -2,7 +2,7 @@
 @using Domain.BaseModels
 @model ServiceHost.Areas.Panel.Pages.Manage.Users.UserInfoModel
 @{
-  ViewData["Title"] = "ویرایش کاربر";
+  ViewData["Title"] = "مشخصات کاربر";
 }
 
 <section class="relative w-full p-6 mx-auto bg-white rounded-md shadow-md">
@@ -11,6 +11,17 @@
   </a>
 
   <h2 class="text-lg font-semibold text-gray-700 capitalize">اطلاعات کاربر</h2>
+
+  <div>
+    @if (Model.UserDetails.Image == null || Model.UserDetails.Image == "default.png")
+    {
+      <img draggable="false" class="max-w-[250px] aspect-[1/1] object-cover border shadow-lg mx-auto rounded-lg my-8" src="~/images/default.png" alt="" />
+    }
+    else
+    {
+      <img draggable="false" class="max-w-[250px] aspect-[1/1] object-cover border shadow-lg mx-auto rounded-lg my-8" src="~/images/ProfilePhotos/@Model.UserDetails.UserName/@Model.UserDetails.Image" alt="" />
+    }
+  </div>
 
   <div class="border border-gray-300 shadow-sm rounded-lg overflow-hidden mx-auto mt-16">
     <table class="w-full text-sm leading-5">

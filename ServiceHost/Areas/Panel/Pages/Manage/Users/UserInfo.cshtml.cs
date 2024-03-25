@@ -1,6 +1,7 @@
-﻿using Application.Repositories;
+﻿using Application.Features.Users.Queries;
 using Domain.BaseModels;
 using Domain.Models;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -11,11 +12,11 @@ namespace ServiceHost.Areas.Panel.Pages.Manage.Users
   [Authorize(Roles = Roles.Admin)]
   public class UserInfoModel : PageModel
   {
-    private readonly IUserRepo _userRepo;
+    private readonly ISender _mediatrSender;
 
-    public UserInfoModel(IUserRepo userRepo)
+    public UserInfoModel(ISender mediatrSender)
     {
-      _userRepo = userRepo;
+      _mediatrSender = mediatrSender;
     }
 
     public User UserDetails { get; set; }
@@ -33,7 +34,7 @@ namespace ServiceHost.Areas.Panel.Pages.Manage.Users
 
       var getId = long.Parse(userId);
 
-      var userResponse = await _userRepo.Get(getId);
+      var userResponse = await _mediatrSender.Send(new GetUserRequest(getId));
 
       if (userResponse == null || userResponse.IsSucceeded == false)
       {

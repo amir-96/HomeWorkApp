@@ -43,12 +43,12 @@ namespace ServiceHost.Areas.Panel.Pages.Manage.Users
     {
       var deleteResponse = await _mediatrSender.Send(new DeleteUserRequest(long.Parse(id)));
 
-      if (deleteResponse != null && deleteResponse.IsSucceeded == true)
+      if (deleteResponse == null && deleteResponse.IsSucceeded == false)
       {
-        return RedirectToPage("/Manage/Users/Index", new { area = "Panel", message = deleteResponse.Message, messageSuccess = true });
+        return RedirectToPage("/Manage/Users/Index", new { area = "Panel", message = deleteResponse.Message, messageSuccess = false });
       }
 
-      return RedirectToPage("/Manage/Users/Index", new { area = "Panel", message = "کاربر با موفقیت حذف شد", messageSuccess = false });
+      return RedirectToPage("/Manage/Users/Index", new { area = "Panel", message = "کاربر با موفقیت حذف شد", messageSuccess = true });
     }
   }
 }

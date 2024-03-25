@@ -5,6 +5,10 @@
   ViewData["Title"] = "مدیریت کاربران";
 }
 
+@section Styles {
+  <link rel="stylesheet" href="~/css/flowbite.min.css" />
+}
+
 <div class="container w-full mx-auto px-2 mt-4">
 
   <div class="flex items-center gap-3 text-gray-700 mb-12">
@@ -76,6 +80,9 @@
             </td>
             <td>
               <div class="flex items-center justify-center gap-2 text-sm-center">
+                <button data-modal-target="authentication-modal-@user.Id" data-modal-toggle="authentication-modal-@user.Id">
+                  <svg class="w-7 h-7" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M512 512m-448 0a448 448 0 1 0 896 0 448 448 0 1 0-896 0Z" fill="#4CAF50"></path><path d="M448 298.666667h128v426.666666h-128z" fill="#FFFFFF"></path><path d="M298.666667 448h426.666666v128H298.666667z" fill="#FFFFFF"></path></g></svg>
+                </button>
                 <a asp-area="Panel" asp-page="/Manage/Users/EditUser" asp-route-userId="@user.Id"><p class="p-1 bg-yellow-400 rounded w-16">ویرایش</p></a>
                 <a asp-area="Panel" asp-page="/Manage/Users/DeleteUser" asp-route-userId="@user.Id"><p class="p-1 bg-red-400 rounded w-16">حذف</p></a>
                 <a asp-area="Panel" asp-page="/Manage/Users/AdminResetPassword" asp-route-userId="@user.Id" class="flex items-center justify-center bg-blue-500 w-8 h-[32px] rounded">
@@ -83,6 +90,47 @@
                 </a>
               </div>
             </td>
+
+            <!-- Main modal -->
+            <div id="authentication-modal-@user.Id" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+              <div class="relative p-4 w-full max-w-md max-h-full">
+                <!-- Modal content -->
+                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                  <!-- Modal header -->
+                  <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                      افزودن @user.FirstName @user.LastName به دوره
+                    </h3>
+                    <button type="button" class="end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="authentication-modal-@user.Id">
+                      <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                      </svg>
+                      <span class="sr-only">بستن</span>
+                    </button>
+                  </div>
+                  <!-- Modal body -->
+                  <div class="p-4 md:p-5">
+                    <form asp-page-handler="AddUserToCourse" method="post">
+
+                      <input asp-for="UserToCourse.UserId" value="@user.Id" type="hidden" />
+
+                      <div>
+                        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">انتخاب دوره</label>
+                        <select asp-for="UserToCourse.CourseId" aria-required="true" class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring">
+                          @foreach (var course in Model.Courses)
+                          {
+                            <option value="@course.Course.Id">@course.Course.Title - @course.Teacher.FirstName @course.Teacher.LastName</option>
+                          }
+                        </select>
+                      </div>
+
+                      <button class="w-full mt-4 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">افزودن کاربر به دوره</button>
+
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
           </tr>
         }
       </tbody>
@@ -92,6 +140,8 @@
 </div>
 
 @section Scripts {
+  <script src="~/js/flowbite.min.js"></script>
+
   <script>
     $(document).ready(function () {
       var table = $("#example").DataTable({
@@ -128,6 +178,5 @@
         .columns.adjust()
         .responsive.recalc();
     });
-
   </script>
 }

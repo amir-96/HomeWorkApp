@@ -1,0 +1,128 @@
+﻿@page
+@model ServiceHost.Areas.Panel.Pages.RegisterModel
+@{
+  Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+
+  <title>ثبت نام</title>
+</head>
+
+<body class="flex items-center justify-center min-h-screen bg-gray-50 p-4" style="background-image: url('@Url.Content("~/images/LoginBackground.jpg")');">
+  <div class="w-full max-w-xl p-6 m-auto mx-auto bg-white rounded-lg shadow shadow-gray-400">
+    <div class="flex justify-center mx-auto">
+      <img class="w-auto h-12 sm:h-14" src="~/images/Logo.svg" alt="" draggable="false">
+    </div>
+
+    <form asp-page-handler="RegisterUser" method="post" class="grid grid-cols-1 sm:grid-cols-2 gap-x-4 mt-6">
+      <div class="sm:col-span-2">
+        <label asp-for="CreateUser.UserName" class="block text-sm text-gray-800">نام کاربری</label>
+        <input asp-for="CreateUser.UserName" class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border rounded-lg focus:border-blue-400 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40" />
+        <span asp-validation-for="CreateUser.UserName" class="text-sm font-semibold text-red-500"></span>
+      </div>
+
+      <div class="sm:col-span-2 mt-4">
+        <label asp-for="CreateUser.Email" class="block text-sm text-gray-800">ایمیل</label>
+        <input asp-for="CreateUser.Email" class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border rounded-lg focus:border-blue-400 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40" />
+        <span asp-validation-for="CreateUser.Email" class="text-sm font-semibold text-red-500"></span>
+      </div>
+
+      <div class="sm:col-span-2 mt-4">
+        <label asp-for="CreateUser.PhoneNumber" class="block text-sm text-gray-800">شماره ی تماس</label>
+        <input asp-for="CreateUser.PhoneNumber" class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border rounded-lg focus:border-blue-400 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40" />
+        <span asp-validation-for="CreateUser.PhoneNumber" class="text-sm font-semibold text-red-500"></span>
+      </div>
+
+      <div class="mt-4">
+        <label asp-for="CreateUser.Password" class="block text-sm text-gray-800">کلمه ی عبور</label>
+        <input asp-for="CreateUser.Password" class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border rounded-lg focus:border-blue-400 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40" />
+        <span asp-validation-for="CreateUser.Password" class="text-sm font-semibold text-red-500"></span>
+      </div>
+
+      <div class="mt-4">
+        <label asp-for="CreateUser.PasswordConfirmation" class="block text-sm text-gray-800">تکرار کلمه ی عبور</label>
+        <input asp-for="CreateUser.PasswordConfirmation" class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border rounded-lg focus:border-blue-400 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40" />
+        <span asp-validation-for="CreateUser.PasswordConfirmation" class="text-sm font-semibold text-red-500"></span>
+      </div>
+
+      <div class="mt-4">
+        <label asp-for="CreateUser.FirstName" class="block text-sm text-gray-800">نام</label>
+        <input asp-for="CreateUser.FirstName" class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border rounded-lg focus:border-blue-400 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40" />
+        <span asp-validation-for="CreateUser.FirstName" class="text-sm font-semibold text-red-500"></span>
+      </div>
+
+      <div class="mt-4">
+        <label asp-for="CreateUser.LastName" class="block text-sm text-gray-800">نام خانوادگی</label>
+        <input asp-for="CreateUser.LastName" class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border rounded-lg focus:border-blue-400 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40" />
+        <span asp-validation-for="CreateUser.LastName" class="text-sm font-semibold text-red-500"></span>
+      </div>
+
+      <google-recaptcha class="mt-4 mx-auto w-fit h-fit sm:col-span-2"></google-recaptcha>
+
+      <div class="mt-6 sm:col-span-2">
+        <button type="submit" class="w-full px-6 py-2.5 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-gray-800 rounded-lg hover:bg-gray-700 focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-50">
+          ثبت نام
+        </button>
+      </div>
+    </form>
+
+    <div class="flex items-center justify-between mt-4">
+      <span class="w-full border-b"></span>
+    </div>
+
+    <div class="mt-8 text-xs font-light text-gray-400 text-center mx-auto w-fit">
+      <a asp-page="/Index">بازگشت به خانه</a>
+    </div>
+  </div>
+
+  @if (ViewData["SuccessNotif"] != null)
+  {
+    <div id="successNotification" class="fixed bottom-4 right-4 flex w-full max-w-sm overflow-hidden bg-white rounded-lg shadow-md opacity-100 transition-opacity duration-500 z-[80] border border-emerald-500">
+      <div class="flex items-center justify-center w-12 bg-emerald-500">
+        <svg class="w-6 h-6 text-white fill-current" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+          <path d="M20 3.33331C10.8 3.33331 3.33337 10.8 3.33337 20C3.33337 29.2 10.8 36.6666 20 36.6666C29.2 36.6666 36.6667 29.2 36.6667 20C36.6667 10.8 29.2 3.33331 20 3.33331ZM16.6667 28.3333L8.33337 20L10.6834 17.65L16.6667 23.6166L29.3167 10.9666L31.6667 13.3333L16.6667 28.3333Z" />
+        </svg>
+      </div>
+
+      <div class="px-4 py-2 -mx-3">
+        <div class="mx-3">
+          <span class="font-semibold text-emerald-500">موفقیت آمیز</span>
+          <p class="text-sm text-gray-600">@ViewData["SuccessNotif"]</p>
+        </div>
+      </div>
+    </div>
+  }
+
+  @if (ViewData["FailureNotif"] != null)
+  {
+    <div id="failureNotification" class="fixed bottom-4 right-4 flex w-full max-w-sm overflow-hidden bg-white rounded-lg shadow-md z-[80] border border-red-500">
+      <div class="flex items-center justify-center w-12 bg-red-500">
+        <svg class="w-6 h-6 text-white fill-current" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+          <path d="M20 3.36667C10.8167 3.36667 3.3667 10.8167 3.3667 20C3.3667 29.1833 10.8167 36.6333 20 36.6333C29.1834 36.6333 36.6334 29.1833 36.6334 20C36.6334 10.8167 29.1834 3.36667 20 3.36667ZM19.1334 33.3333V22.9H13.3334L21.6667 6.66667V17.1H27.25L19.1334 33.3333Z" />
+        </svg>
+      </div>
+
+      <div class="px-4 py-2 -mx-3">
+        <div class="mx-3">
+          <span class="font-semibold text-red-500">خطا</span>
+          <p class="text-sm text-gray-600">
+            @ViewData["FailureNotif"]
+          </p>
+        </div>
+      </div>
+    </div>
+  }
+
+  <script src="~/lib/jquery/dist/jquery.min.js"></script>
+  <partial name="_ValidationScriptsPartial" />
+  <script src="~/js/site.js"></script>
+  <script type="text/javascript" src="https://www.google.com/recaptcha/api.js?hl=fa"></script>
+</body>
+</html>

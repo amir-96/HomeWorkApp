@@ -16,7 +16,7 @@ namespace Application.ViewModels.Course
     [Required(ErrorMessage = "پر کردن این فیلد الزامی است")]
     public decimal Price { get; set; }
     [Required(ErrorMessage = "پر کردن این فیلد الزامی است")]
-    public decimal Capacity { get; set; }
+    public int Capacity { get; set; }
     [Required(ErrorMessage = "پر کردن این فیلد الزامی است")]
     public string Image { get; set; }
 

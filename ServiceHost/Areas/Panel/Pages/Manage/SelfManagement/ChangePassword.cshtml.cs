@@ -3,12 +3,14 @@ using Application.Features.Users.Queries;
 using Application.ViewModels.User;
 using Domain.Models;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Security.Claims;
 
 namespace ServiceHost.Areas.Panel.Pages.Manage.SelfManagement
 {
+  [Authorize]
   public class ChangePasswordModel : PageModel
   {
     private readonly ISender _mediatrSender;
@@ -25,7 +27,7 @@ namespace ServiceHost.Areas.Panel.Pages.Manage.SelfManagement
 
       if (userId == null)
       {
-        return RedirectToPage("/Manage/Users/Index", new { area = "Panel", message = "کاربر نامعتبر", messageSuccess = false });
+        return RedirectToPage("/Manage/Index", new { area = "Panel", message = "کاربر نامعتبر", messageSuccess = false });
       }
 
       var longId = long.Parse(userId);
@@ -34,7 +36,7 @@ namespace ServiceHost.Areas.Panel.Pages.Manage.SelfManagement
 
       if (userResponse.IsSucceeded == false)
       {
-        return RedirectToPage("/Manage/Users/Index", new { area = "Panel", message = userResponse.Message, messageSuccess = false });
+        return RedirectToPage("/Manage/Index", new { area = "Panel", message = userResponse.Message, messageSuccess = false });
       }
 
       UserForEdit = userResponse.Data;
@@ -51,11 +53,11 @@ namespace ServiceHost.Areas.Panel.Pages.Manage.SelfManagement
 
       if (usersResponse.IsSucceeded)
       {
-        return RedirectToPage("/Manage/Users/Index", new { area = "Panel", message = "تغییر کلمه ی عبور با موفقیت انجام شد", messageSuccess = true });
+        return RedirectToPage("/Manage/Index", new { area = "Panel", message = "تغییر کلمه ی عبور با موفقیت انجام شد", messageSuccess = true });
       }
       else
       {
-        return RedirectToPage("/Manage/Users/Index", new { area = "Panel", message = usersResponse.Message, messageSuccess = false });
+        return RedirectToPage("/Manage/Index", new { area = "Panel", message = usersResponse.Message, messageSuccess = false });
       }
     }
   }

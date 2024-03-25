@@ -7,19 +7,8 @@ namespace ServiceHost.Pages
 {
   public class IndexModel : PageModel
   {
-    private readonly ICourseRepo _courseRepo;
-
-    public IndexModel(ICourseRepo courseRepo)
+    public void OnGet()
     {
-      _courseRepo = courseRepo;
-    }
-
-    public List<User> UsersList { get; set; }
-    public async Task OnGet()
-    {
-      var response = await _courseRepo.GetAllCourseStudents(1);
-
-      UsersList = response.Data;
     }
   }
 }

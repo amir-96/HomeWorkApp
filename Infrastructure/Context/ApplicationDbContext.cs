@@ -31,6 +31,8 @@ namespace Infrastructure.Context
 
       modelBuilder.Entity<User>().HasIndex(u => u.UserName).IsUnique();
       modelBuilder.Entity<User>().HasIndex(u => u.Email).IsUnique();
+      modelBuilder.Entity<Course>().Property(c => c.Description)
+             .HasColumnType("text");
 
       modelBuilder.Entity<User>()
         .HasData(
@@ -46,20 +48,6 @@ namespace Infrastructure.Context
             Role = Roles.Admin,
             Image = "default.png",
             Ballance = 0
-          }
-      );
-
-      modelBuilder.Entity<Course>()
-        .HasData(
-          new Course
-          {
-            Id = 1,
-            Title = "پایتون مقدماتی",
-            Description = "دوره ی پایتون مقدماتی. بهترین دوره برای شروع برنامه نویسی.",
-            TeacherId = 1,
-            Image = "default.jpg",
-            Price = 0,
-            Capacity = 20
           }
       );
     }

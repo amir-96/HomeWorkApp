@@ -29,7 +29,7 @@ namespace ServiceHost.Areas.Panel.Pages.Manage.SelfManagement
 
       if (userId == null)
       {
-        return RedirectToPage("/Manage/Users/Index", new { area = "Panel", message = "کاربر نامعتبر", messageSuccess = false });
+        return RedirectToPage("/Manage/Index", new { area = "Panel", message = "کاربر نامعتبر", messageSuccess = false });
       }
 
       var longId = long.Parse(userId);
@@ -38,7 +38,7 @@ namespace ServiceHost.Areas.Panel.Pages.Manage.SelfManagement
 
       if (userResponse.IsSucceeded == false)
       {
-        return RedirectToPage("/Manage/Users/Index", new { area = "Panel", message = userResponse.Message, messageSuccess = false });
+        return RedirectToPage("/Manage/Index", new { area = "Panel", message = userResponse.Message, messageSuccess = false });
       }
 
       UserForEdit = userResponse.Data;
@@ -57,14 +57,14 @@ namespace ServiceHost.Areas.Panel.Pages.Manage.SelfManagement
       if (Image == null || Image.Length == 0)
       {
         ModelState.AddModelError("Image", "Please select a file.");
-        return RedirectToPage("/Manage/Users/Index", new { area = "Panel", message = "Please select a file", messageSuccess = false });
+        return RedirectToPage("/Manage/Index", new { area = "Panel", message = "Please select a file", messageSuccess = false });
       }
 
       // Limit image size if needed
       if (Image.Length > 5 * 1024 * 1024) // 5 MB
       {
         ModelState.AddModelError("Image", "File size should not exceed 5 MB.");
-        return RedirectToPage("/Manage/Users/Index", new { area = "Panel", message = "File size should not exceed 5 MB", messageSuccess = false });
+        return RedirectToPage("/Manage/Index", new { area = "Panel", message = "File size should not exceed 5 MB", messageSuccess = false });
       }
 
       var allowedTypes = new[] { "image/jpeg", "image/png" };
@@ -72,13 +72,13 @@ namespace ServiceHost.Areas.Panel.Pages.Manage.SelfManagement
       if (!allowedTypes.Contains(Image.ContentType))
       {
         ModelState.AddModelError("Image", "Please select a JPG or PNG file.");
-        return RedirectToPage("/Manage/Users/Index", new { area = "Panel", message = "Please select a JPG or PNG file", messageSuccess = false });
+        return RedirectToPage("/Manage/Index", new { area = "Panel", message = "Please select a JPG or PNG file", messageSuccess = false });
       }
 
       var userResponse = await _mediatrSender.Send(new GetUserRequest(UserId));
       
       if (userResponse.IsSucceeded == false)
-        return RedirectToPage("/Manage/Users/Index", new { area = "Panel", message = "کاربر نامعتبر", messageSuccess = false });
+        return RedirectToPage("/Manage/Index", new { area = "Panel", message = "کاربر نامعتبر", messageSuccess = false });
 
       var username = userResponse.Data.UserName;
 
@@ -115,7 +115,7 @@ namespace ServiceHost.Areas.Panel.Pages.Manage.SelfManagement
       var changeImageResponse = await _mediatrSender.Send(new ChangeImageRequest(changeRequestDTO));
 
       if (!changeImageResponse)
-        return RedirectToPage("/Manage/Users/Index", new { area = "Panel", message = "خطا در تغییر تصویر", messageSuccess = false });
+        return RedirectToPage("/Manage/Index", new { area = "Panel", message = "خطا در تغییر تصویر", messageSuccess = false });
 
       using (var stream = new FileStream(filePath, FileMode.Create))
       {
@@ -132,7 +132,7 @@ namespace ServiceHost.Areas.Panel.Pages.Manage.SelfManagement
       var userResponse = await _mediatrSender.Send(new GetUserRequest(UserId));
 
       if (userResponse.IsSucceeded == false)
-        return RedirectToPage("/Manage/Users/Index", new { area = "Panel", message = "کاربر نامعتبر", messageSuccess = false });
+        return RedirectToPage("/Manage/Index", new { area = "Panel", message = "کاربر نامعتبر", messageSuccess = false });
 
       var username = userResponse.Data.UserName;
 
@@ -176,11 +176,11 @@ namespace ServiceHost.Areas.Panel.Pages.Manage.SelfManagement
 
       if (usersResponse.IsSucceeded)
       {
-        return RedirectToPage("/Manage/Users/Index", new { area = "Panel", message = "ویرایش با موفقیت انجام شد", messageSuccess = true });
+        return RedirectToPage("/Manage/Index", new { area = "Panel", message = "ویرایش با موفقیت انجام شد", messageSuccess = true });
       }
       else
       {
-        return RedirectToPage("/Manage/Users/Index", new { area = "Panel", message = usersResponse.Message, messageSuccess = false });
+        return RedirectToPage("/Manage/Index", new { area = "Panel", message = usersResponse.Message, messageSuccess = false });
       }
     }
   }

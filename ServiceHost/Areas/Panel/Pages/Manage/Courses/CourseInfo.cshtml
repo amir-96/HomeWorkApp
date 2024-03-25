@@ -1,0 +1,150 @@
+﻿@page
+@model ServiceHost.Areas.Panel.Pages.Manage.Courses.CourseInfoModel
+@{
+  ViewData["Title"] = "مشخصات دوره";
+}
+
+@section Styles {
+  <link rel="stylesheet" href="~/css/flowbite.min.css" />
+}
+
+<section class="relative w-full p-6 mx-auto bg-white rounded-md shadow-md">
+  @if (Model.IsTeacher)
+  {
+    <a asp-area="Panel" asp-page="/Manage/Courses/Index" asp-route-isTeacher="true">
+      <svg class="absolute left-4 top-4" height="40px" width="40px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 487.622 487.622" xml:space="preserve" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <g> <circle style="fill:#EED26A;" cx="243.811" cy="243.811" r="243.811"></circle> <circle style="fill:#D97077;" cx="243.811" cy="243.811" r="243.811"></circle> <path style="fill:#CA6168;" d="M487.622,243.811c0-4.875-0.16-9.711-0.441-14.516l-129.826-93.017l-131.876,93.094L199.87,351.343 l154.131,110.005C433.285,421.108,487.622,338.807,487.622,243.811z"></path> <polygon style="fill:#FFFFFF;" points="199.869,351.343 357.354,351.343 276.415,243.811 357.354,136.279 199.869,136.279 118.931,243.811 "></polygon> </g> </g> </g></svg>
+    </a>
+  }
+  else if (Model.IsStudent)
+  {
+    <a asp-area="Panel" asp-page="/Manage/Courses/Index" asp-route-isStudent="true">
+      <svg class="absolute left-4 top-4" height="40px" width="40px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 487.622 487.622" xml:space="preserve" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <g> <circle style="fill:#EED26A;" cx="243.811" cy="243.811" r="243.811"></circle> <circle style="fill:#D97077;" cx="243.811" cy="243.811" r="243.811"></circle> <path style="fill:#CA6168;" d="M487.622,243.811c0-4.875-0.16-9.711-0.441-14.516l-129.826-93.017l-131.876,93.094L199.87,351.343 l154.131,110.005C433.285,421.108,487.622,338.807,487.622,243.811z"></path> <polygon style="fill:#FFFFFF;" points="199.869,351.343 357.354,351.343 276.415,243.811 357.354,136.279 199.869,136.279 118.931,243.811 "></polygon> </g> </g> </g></svg>
+    </a>
+  }
+  else
+  {
+    <a asp-area="Panel" asp-page="/Manage/Courses/Index">
+      <svg class="absolute left-4 top-4" height="40px" width="40px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 487.622 487.622" xml:space="preserve" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <g> <circle style="fill:#EED26A;" cx="243.811" cy="243.811" r="243.811"></circle> <circle style="fill:#D97077;" cx="243.811" cy="243.811" r="243.811"></circle> <path style="fill:#CA6168;" d="M487.622,243.811c0-4.875-0.16-9.711-0.441-14.516l-129.826-93.017l-131.876,93.094L199.87,351.343 l154.131,110.005C433.285,421.108,487.622,338.807,487.622,243.811z"></path> <polygon style="fill:#FFFFFF;" points="199.869,351.343 357.354,351.343 276.415,243.811 357.354,136.279 199.869,136.279 118.931,243.811 "></polygon> </g> </g> </g></svg>
+    </a>
+  }
+
+  <h2 class="text-lg font-semibold text-gray-700 capitalize">اطلاعات دوره</h2>
+
+  <div>
+    @if (Model.CourseTable.Course.Image == null || Model.CourseTable.Course.Image == "default.jpg")
+    {
+      <img draggable="false" class="max-w-[80%] aspect-[5/3] object-cover border shadow-lg mx-auto rounded-lg my-8" src="~/images/default.jpg" alt="" />
+    }
+    else
+    {
+      <img draggable="false" class="max-w-[80%] aspect-[5/3] object-cover border shadow-lg mx-auto rounded-lg my-8" src="~/images/CoursePhotos/@Model.CourseTable.Course.Image" alt="" />
+    }
+  </div>
+
+  <p class="text-xl font-semibold text-gray-700 mt-12 text-center">توضیحات دوره</p>
+
+  <div>
+    @Html.Raw(Model.CourseTable.Course.Description)
+  </div>
+
+  <p class="text-xl font-semibold text-gray-700 mt-12 text-center">مشخصات دوره</p>
+
+  <div class="border border-gray-300 shadow-sm rounded-lg overflow-hidden mx-auto mt-8">
+    <table class="w-full text-sm leading-5">
+      <tbody>
+        <tr>
+          <td class="py-3 px-4 text-right font-medium text-gray-600">نام دوره</td>
+          <td class="py-3 px-4 text-right">@Model.CourseTable.Course.Title</td>
+        </tr>
+        <tr class="bg-gray-50">
+          <td class="py-3 px-4 text-right font-medium text-gray-600">نام استاد دوره</td>
+          <td class="py-3 px-4 text-right">@Model.CourseTable.Teacher.FirstName @Model.CourseTable.Teacher.LastName</td>
+        </tr>
+        <tr>
+          <td class="py-3 px-4 text-right font-medium text-gray-600 pl-8">تاریخ شروع دوره</td>
+          <td class="py-3 px-4 text-right">@Model.CourseTable.Course.StartDate</td>
+        </tr>
+        <tr class="bg-gray-50">
+          <td class="py-3 px-4 text-right font-medium text-gray-600 pl-8">مدت زمان دوره</td>
+          <td class="py-3 px-4 text-right">@Model.CourseTable.Course.TimeSpan روز</td>
+        </tr>
+        <tr>
+          <td class="py-3 px-4 text-right font-medium text-gray-600">تاریخ اتمام دوره</td>
+          <td class="py-3 px-4 text-right">@Model.CourseTable.Course.EndDate</td>
+        </tr>
+        <tr>
+          <td class="py-3 px-4 text-right font-medium text-gray-600">قیمت دوره</td>
+          <td class="py-3 px-4 text-right">@Model.CourseTable.Course.Price تومان</td>
+        </tr>
+        <tr>
+          <td class="py-3 px-4 text-right font-medium text-gray-600">تعداد دانشجویان دوره</td>
+          <td class="py-3 px-4 text-right">@Model.CourseTable.Students.Count()</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  @if (Model.CourseTable.Students.Count > 0)
+  {
+    <p class="text-xl font-semibold text-gray-700 mt-12 text-center">لیست دانشجویان دوره</p>
+
+    <div class="border border-gray-300 shadow-sm rounded-lg overflow-hidden mx-auto mt-12">
+      <table class="w-full text-sm leading-5 text-center">
+        <tbody>
+          <tr>
+            <th class="py-3 px-4 font-semibold text-gray-600 bg-gray-200 text-center mx-auto">نام</th>
+            <th class="py-3 px-4 font-semibold bg-gray-200 text-center">نام خانوادگی</th>
+            @if (Model.IsAdmin)
+            {
+              <th class="py-3 px-4 font-semibold bg-gray-200 text-center">حذف از دوره</th>
+            }
+          </tr>
+          @foreach (var student in Model.CourseTable.Students)
+          {
+            <tr>
+              <td class="py-3 px-4 text-gray-600 text-center">@student.FirstName</td>
+              <td class="py-3 px-4 text-center">@student.LastName</td>
+              @if (Model.IsAdmin)
+              {
+                <td><button data-modal-target="popup-modal-@student.Id" data-modal-toggle="popup-modal-@student.Id" class="py-1 px-2 text-center bg-red-500 hover:bg-red-600 rounded text-white">حذف دانشجو از دوره</button></td>
+              }
+
+              <div id="popup-modal-@student.Id" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                <div class="relative p-4 w-full max-w-md max-h-full">
+                  <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                    <button type="button" class="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="popup-modal-@student.Id">
+                      <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                      </svg>
+                      <span class="sr-only">بستن</span>
+                    </button>
+                    <div class="p-4 md:p-5 text-center">
+                      <svg class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                      </svg>
+                      <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">آیا از حذف @student.FirstName @student.LastName از این دوره اطمینان دارید؟</h3>
+                      <div class="flex items-center justify-center gap-2">
+                        <button data-modal-hide="popup-modal-@student.Id" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium w-28 text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">انصراف</button>
+                        <form asp-page-handler="DeleteUserFromCourse" method="post">
+                          <input asp-for="UsetToCourse.UserId" value="@student.Id" type="hidden" />
+                          <input asp-for="UsetToCourse.CourseId" value="@Model.CourseTable.Course.Id" type="hidden" />
+                          <button data-modal-hide="popup-modal-@student.Id" type="submit" class="text-white bg-red-600 w-28 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
+                            <p class="text-center mx-auto w-full">حذف</p>
+                          </button>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</section>
+
+@section Scripts {
+  <script src="~/js/flowbite.min.js"></script>
+}

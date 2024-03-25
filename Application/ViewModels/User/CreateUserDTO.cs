@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Domain.BaseModels;
+using System.ComponentModel.DataAnnotations;
 
 namespace Application.ViewModels.User
 {
@@ -39,5 +40,10 @@ namespace Application.ViewModels.User
     [Required(ErrorMessage = "پر کردن این فیلد الزامی است")]
     [RegularExpression("^(Admin|Teacher|Student)$", ErrorMessage = "Role must be either Admin, Teacher, or Student")]
     public string Role { get; set; }
+
+    public CreateUserDTO()
+    {
+      Role = Roles.Admin;
+    }
   }
 }

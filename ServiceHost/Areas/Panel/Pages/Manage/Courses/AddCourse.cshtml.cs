@@ -5,10 +5,8 @@ using Domain.BaseModels;
 using Domain.Models;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.Globalization;
 
 namespace ServiceHost.Areas.Panel.Pages.Manage.Courses
 {
