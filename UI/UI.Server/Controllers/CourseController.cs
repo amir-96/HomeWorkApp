@@ -140,7 +140,7 @@ namespace UI.Server.Controllers
 
       if (response.IsSucceeded)
       {
-        return Ok(response.Data);
+        return Ok(response.Data[0]);
       }
       else
       {

@@ -19,7 +19,6 @@ namespace ServiceHost.Areas.Panel.Pages.Manage.Users
       _mediatrSender = mediatrSender;
     }
 
-    public bool MessageSuccess { get; set; }
     public List<User> Users { get; set; }
 
     public async Task<IActionResult> OnGet(string message = null, bool messageSuccess = false)
@@ -46,8 +45,7 @@ namespace ServiceHost.Areas.Panel.Pages.Manage.Users
       }
       else
       {
-        ViewData["Notification"] = usersResponse.Message;
-        return RedirectToPage("/Panel/Manage/Index");
+        return RedirectToPage("/Manage/Users/Index", new { area = "Panel" });
       }
     }
   }

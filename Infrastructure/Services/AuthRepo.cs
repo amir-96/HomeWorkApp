@@ -11,7 +11,7 @@ using AuthenticationProperties = Microsoft.AspNetCore.Authentication.Authenticat
 
 namespace Infrastructure.Services
 {
-  public class AuthRepo : IAuthRepo
+    public class AuthRepo : IAuthRepo
   {
     private readonly ApplicationDbContext _context;
     private readonly IPasswordRepo _passwordRepo;

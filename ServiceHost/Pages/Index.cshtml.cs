@@ -1,4 +1,5 @@
-using Infrastructure.Context;
+using Application.Repositories;
+using Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -6,10 +7,19 @@ namespace ServiceHost.Pages
 {
   public class IndexModel : PageModel
   {
+    private readonly ICourseRepo _courseRepo;
 
-    public void OnGet()
+    public IndexModel(ICourseRepo courseRepo)
     {
+      _courseRepo = courseRepo;
+    }
 
+    public List<User> UsersList { get; set; }
+    public async Task OnGet()
+    {
+      var response = await _courseRepo.GetAllCourseStudents(1);
+
+      UsersList = response.Data;
     }
   }
 }

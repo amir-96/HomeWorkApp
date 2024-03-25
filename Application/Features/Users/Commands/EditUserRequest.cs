@@ -8,11 +8,11 @@ namespace Application.Features.Users.Commands
 {
     public class EditUserRequest : IRequest<ServerResponse<bool>>
   {
-    public EditUserDTO EditUserDTO { get; set; }
+    public EditUserDTO SelfEditDTO { get; set; }
 
     public EditUserRequest(EditUserDTO editUserDTO)
     {
-      EditUserDTO = editUserDTO;
+      SelfEditDTO = editUserDTO;
     }
   }
 
@@ -27,9 +27,9 @@ namespace Application.Features.Users.Commands
 
     public async Task<ServerResponse<bool>> Handle(EditUserRequest request, CancellationToken cancellationToken)
     {
-      var oldUserResponse = await _userRepo.Get(request.EditUserDTO.Id);
+      var oldUserResponse = await _userRepo.Get(request.SelfEditDTO.Id);
 
-      var editedUser = request.EditUserDTO;
+      var editedUser = request.SelfEditDTO;
 
       var isExists = await _userRepo.Exists(u => (u.UserName == editedUser.UserName || u.Email == editedUser.Email) && u.Id != editedUser.Id);
 
@@ -44,6 +44,7 @@ namespace Application.Features.Users.Commands
       oldUserResponse.Data.FirstName = editedUser.FirstName;
       oldUserResponse.Data.LastName = editedUser.LastName;
       oldUserResponse.Data.Role = editedUser.Role;
+      oldUserResponse.Data.Ballance = editedUser.Ballance;
       oldUserResponse.Data.UpdatedAt = DateTime.UtcNow;
 
       var response = await _userRepo.Update(oldUserResponse.Data.Id, oldUserResponse.Data);

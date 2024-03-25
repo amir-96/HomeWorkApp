@@ -1,6 +1,5 @@
 ﻿using Domain.BaseModels;
 using Domain.Models;
-using Infrastructure.Mapping;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Context
@@ -13,16 +12,56 @@ namespace Infrastructure.Context
 
     public DbSet<User> Users { get; set; }
     public DbSet<Course> Courses { get; set; }
-    public DbSet<UserCourse> UserCourses { get; set; }
     public DbSet<HomeWork> HomeWorks { get; set; }
     public DbSet<HomeWorkAnswer> HomeWorkAnswers { get; set; }
     public DbSet<SystemLog> SystemLogs { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-      modelBuilder.ApplyConfiguration(new UserMapping());
-      modelBuilder.ApplyConfiguration(new CourseMapping());
-      modelBuilder.ApplyConfiguration(new UserCourseMapping());
+      modelBuilder.Entity<User>()
+        .HasMany(x => x.Courses)
+        .WithMany(y => y.Users)
+        .UsingEntity(j => j.ToTable("UserCourse"));
+
+      modelBuilder.Entity<Course>()
+          .HasOne(c => c.Teacher)
+          .WithMany()
+          .HasForeignKey(c => c.TeacherId)
+          .IsRequired();
+
+      modelBuilder.Entity<User>().HasIndex(u => u.UserName).IsUnique();
+      modelBuilder.Entity<User>().HasIndex(u => u.Email).IsUnique();
+
+      modelBuilder.Entity<User>()
+        .HasData(
+          new User
+          {
+            Id = 1,
+            UserName = "amir",
+            Email = "amirjob75@gmail.com",
+            HashedPassword = BCrypt.Net.BCrypt.HashPassword("amir12345"),
+            PhoneNumber = "09163097345",
+            FirstName = "امیر",
+            LastName = "حسینی",
+            Role = Roles.Admin,
+            Image = "default.png",
+            Ballance = 0
+          }
+      );
+
+      modelBuilder.Entity<Course>()
+        .HasData(
+          new Course
+          {
+            Id = 1,
+            Title = "پایتون مقدماتی",
+            Description = "دوره ی پایتون مقدماتی. بهترین دوره برای شروع برنامه نویسی.",
+            TeacherId = 1,
+            Image = "default.jpg",
+            Price = 0,
+            Capacity = 20
+          }
+      );
     }
   }
 }

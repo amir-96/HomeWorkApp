@@ -1,4 +1,5 @@
 ﻿using Domain.BaseModels;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Models
 {
@@ -12,6 +13,7 @@ namespace Domain.Models
     public string Image { get; set; }
 
     public long CourseId { get; set; }
+    [ForeignKey("CourseId")]
     public Course Course { get; set; }
 
     public ICollection<HomeWorkAnswer> HomeWorkAnswers { get; set; }

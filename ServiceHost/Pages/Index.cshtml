@@ -12,3 +12,8 @@
 <div>
   @ViewData["Notification"]
 </div>
+
+@foreach (var user in Model.UsersList)
+{
+  <p>@user.FirstName</p>
+}

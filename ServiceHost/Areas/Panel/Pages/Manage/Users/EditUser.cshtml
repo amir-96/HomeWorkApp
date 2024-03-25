@@ -50,6 +50,12 @@
       </div>
 
       <div>
+        <label asp-for="EditUserDTO.Ballance" class="text-gray-700">موجودی حساب</label>
+        <input asp-for="EditUserDTO.Ballance" type="number" value="@Model.UserForEdit.Ballance" aria-required="true" class="text-right block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring">
+        <span asp-validation-for="EditUserDTO.Ballance" class="text-sm font-semibold text-red-500"></span>
+      </div>
+
+      <div>
         <label asp-for="EditUserDTO.Role" class="text-gray-700">نقش</label>
         <select asp-for="EditUserDTO.Role" aria-required="true" class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring">
           @foreach (var role in Domain.BaseModels.Roles.GetRoles())
@@ -62,7 +68,7 @@
     </div>
 
     <div class="flex justify-end mt-6">
-      <button class="px-8 py-2.5 w-full leading-5 text-white transition-colors duration-300 transform bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:bg-gray-600">افزودن کاربر</button>
+      <button class="px-8 py-2.5 w-full leading-5 text-white transition-colors duration-300 transform bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:bg-gray-600">ویرایش کاربر</button>
     </div>
   </form>
 </section>

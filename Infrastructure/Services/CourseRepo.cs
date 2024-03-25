@@ -17,27 +17,69 @@ namespace Infrastructure.Services
       _userRepo = userRepo;
     }
 
+    public async Task<ServerResponse<List<CourseTableDTO>>> GetAllCourseTable()
+    {
+      try
+      {
+        var courses = await _context.Courses
+          .Where(c => c.IsActive == true)
+          .Include(c => c.Teacher)
+          .Include(c => c.Users)
+          .ToListAsync();
+
+        if (courses == null)
+        {
+          return new ServerResponse<List<CourseTableDTO>>(false, "هیچ دوره ای پیدا نشد", null);
+        }
+
+        var courseTableList = new List<CourseTableDTO>();
+
+        foreach (var course in courses)
+        {
+          var courseTable = new CourseTableDTO()
+          {
+            Course = course,
+            Teacher = course.Teacher,
+            Students = course.Users.ToList()
+          };
+
+          courseTableList.Add(courseTable);
+        }
+
+        return new ServerResponse<List<CourseTableDTO>>(true, "لیست دوره با موفقیت دریافت شد", courseTableList);
+      }
+      catch (Exception ex)
+      {
+        string errorMessage = "عملیات با خطا مواجه شد : " + ex.Message;
+
+        if (ex.InnerException != null)
+        {
+          errorMessage += " | Inner Error: " + ex.InnerException.Message;
+        }
+
+        var response = new ServerResponse<List<CourseTableDTO>>(false, errorMessage, null);
+
+        return response;
+      }
+    }
+
     public async Task<ServerResponse<List<User>>> GetAllCourseStudents(long courseId)
     {
       try
       {
-        var courseResponse = await Get(courseId);
+        var courseResponse = await _context.Courses
+          .Where(c => c.IsActive == true)
+          .Include(c => c.Users)
+          .SingleOrDefaultAsync(c => c.Id == courseId);
 
-        if (courseResponse == null || courseResponse.IsSucceeded == false)
+        if (courseResponse == null)
         {
           return new ServerResponse<List<User>> (false, "دوره با این مشخصات پیدا نشد", null);
         }
 
-        var userIds = await _context.UserCourses
-            .Where(uc => uc.CourseId == courseId)
-            .Select(uc => uc.UserId)
-            .ToListAsync();
+        var courseUsers = courseResponse.Users.ToList();
 
-        var students = await _context.Users
-            .Where(u => userIds.Contains(u.Id))
-            .ToListAsync();
-
-        return new ServerResponse<List<User>>(true, "لیست دانشجویان دوره با موفقیت دریافت شد", students);
+        return new ServerResponse<List<User>>(true, "لیست دانشجویان دوره با موفقیت دریافت شد", courseUsers);
       }
       catch (Exception ex)
       {
@@ -124,35 +166,36 @@ namespace Infrastructure.Services
       {
         var userResponse = await _userRepo.Get(userToCourseDTO.UserId);
 
-        var courseResponse = await Get(userToCourseDTO.CourseId);
+        var courseResponse = await _context.Courses
+          .Where(c => c.IsActive == true)
+          .Include(c => c.Users)
+          .SingleOrDefaultAsync(c => c.Id == userToCourseDTO.CourseId);
 
-        if (userResponse == null || courseResponse == null || userResponse.IsSucceeded == false || courseResponse.IsSucceeded == false)
+        if (userResponse == null || courseResponse == null || userResponse.IsSucceeded == false)
         {
           return new ServerResponse<bool>(false, "کاربر یا دوره با این مشخصات پیدا نشد", false);
         }
 
         // Check if the user is already enrolled in the course
-        var existingUserCourse = await _context.UserCourses
-            .AnyAsync(uc => uc.UserId == userToCourseDTO.UserId && uc.CourseId == userToCourseDTO.CourseId);
+        var isEnrolled = await _context.Courses
+            .Where(c => c.Id == userToCourseDTO.CourseId)
+            .SelectMany(c => c.Users)
+            .AnyAsync(u => u.Id == userToCourseDTO.UserId);
 
-        if (existingUserCourse)
+        if (isEnrolled)
         {
           return new ServerResponse<bool>(false, "کاربر قبلاً در دوره ثبت‌نام کرده است", false);
         }
 
         // Check if the user is the teacher of the course
-        if (userToCourseDTO.UserId == courseResponse.Data.TeacherId)
+        if (userToCourseDTO.UserId == courseResponse.TeacherId)
         {
           return new ServerResponse<bool>(false, "استاد دوره نمی‌تواند به لیست دانشجویان دوره اضافه شود", false);
         }
 
-        var userCourse = new UserCourse
-        {
-          UserId = userToCourseDTO.UserId,
-          CourseId = userToCourseDTO.CourseId,
-        };
+        var newStudent = userResponse.Data;
 
-        await _context.UserCourses.AddAsync(userCourse);
+        courseResponse.Users.Add(newStudent);
 
         await _context.SaveChangesAsync();
 
@@ -177,15 +220,19 @@ namespace Infrastructure.Services
     {
       try
       {
-        var userCourse = await _context.UserCourses
-            .SingleOrDefaultAsync(uc => uc.UserId == userToCourseDTO.UserId && uc.CourseId == userToCourseDTO.CourseId);
+        var userResponse = await _userRepo.Get(userToCourseDTO.UserId);
 
-        if (userCourse == null)
+        var courseResponse = await _context.Courses
+          .Where(c => c.IsActive == true)
+          .Include(c => c.Users)
+          .SingleOrDefaultAsync(c => c.Id == userToCourseDTO.CourseId);
+
+        if (userResponse == null || courseResponse == null || userResponse.IsSucceeded == false)
         {
           return new ServerResponse<bool>(false, "کاربر یا دوره با این مشخصات پیدا نشد", false);
         }
 
-        _context.UserCourses.Remove(userCourse);
+        courseResponse.Users.Remove(userResponse.Data);
 
         await _context.SaveChangesAsync();
 

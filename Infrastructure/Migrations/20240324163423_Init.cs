@@ -13,6 +13,20 @@ namespace Infrastructure.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "SystemLogs",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Description = table.Column<string>(type: "text", nullable: true),
+                    Time = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SystemLogs", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
@@ -22,8 +36,11 @@ namespace Infrastructure.Migrations
                     Email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
                     HashedPassword = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: false),
                     PhoneNumber = table.Column<string>(type: "text", nullable: true),
+                    FirstName = table.Column<string>(type: "text", nullable: true),
+                    LastName = table.Column<string>(type: "text", nullable: true),
                     Role = table.Column<string>(type: "character varying(40)", maxLength: 40, nullable: false),
                     Image = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: false),
+                    Ballance = table.Column<decimal>(type: "numeric", nullable: false),
                     IsActive = table.Column<bool>(type: "boolean", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
@@ -39,12 +56,13 @@ namespace Infrastructure.Migrations
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Title = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    Description = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: true),
+                    Title = table.Column<string>(type: "text", nullable: true),
+                    Description = table.Column<string>(type: "text", nullable: true),
                     StartDate = table.Column<DateOnly>(type: "date", nullable: false),
                     TimeSpan = table.Column<int>(type: "integer", nullable: false),
                     EndDate = table.Column<DateOnly>(type: "date", nullable: false),
                     Image = table.Column<string>(type: "text", nullable: true),
+                    Price = table.Column<decimal>(type: "numeric", nullable: false),
                     TeacherId = table.Column<long>(type: "bigint", nullable: false),
                     IsActive = table.Column<bool>(type: "boolean", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
@@ -90,26 +108,24 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "UserCourses",
+                name: "UserCourse",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    UserId = table.Column<long>(type: "bigint", nullable: false),
-                    CourseId = table.Column<long>(type: "bigint", nullable: false)
+                    CoursesId = table.Column<long>(type: "bigint", nullable: false),
+                    UsersId = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserCourses", x => x.Id);
+                    table.PrimaryKey("PK_UserCourse", x => new { x.CoursesId, x.UsersId });
                     table.ForeignKey(
-                        name: "FK_UserCourses_Courses_CourseId",
-                        column: x => x.CourseId,
+                        name: "FK_UserCourse_Courses_CoursesId",
+                        column: x => x.CoursesId,
                         principalTable: "Courses",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_UserCourses_Users_UserId",
-                        column: x => x.UserId,
+                        name: "FK_UserCourse_Users_UsersId",
+                        column: x => x.UsersId,
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -142,18 +158,13 @@ namespace Infrastructure.Migrations
 
             migrationBuilder.InsertData(
                 table: "Users",
-                columns: new[] { "Id", "CreatedAt", "Email", "HashedPassword", "Image", "IsActive", "PhoneNumber", "Role", "UpdatedAt", "UserName" },
-                values: new object[] { 1L, new DateTime(2024, 3, 22, 15, 9, 23, 63, DateTimeKind.Utc).AddTicks(9243), "amirjob75@gmail.com", "$2a$11$XwHVx9d8Yr4wIp4dvZI7wexElt3nE.ahKUG5FmqW8JCPav7e8F7YK", "default.jpg", true, "09163097345", "Admin", new DateTime(2024, 3, 22, 15, 9, 23, 63, DateTimeKind.Utc).AddTicks(9245), "amir" });
+                columns: new[] { "Id", "Ballance", "CreatedAt", "Email", "FirstName", "HashedPassword", "Image", "IsActive", "LastName", "PhoneNumber", "Role", "UpdatedAt", "UserName" },
+                values: new object[] { 1L, 0m, new DateTime(2024, 3, 24, 16, 34, 22, 661, DateTimeKind.Utc).AddTicks(7043), "amirjob75@gmail.com", "امیر", "$2a$11$6lASmv1aTlMhTcH3fuwfbujuzKSV40Akf0UjCRkOs/mz/5m8r7j4u", "default.png", true, "حسینی", "09163097345", "Admin", new DateTime(2024, 3, 24, 16, 34, 22, 661, DateTimeKind.Utc).AddTicks(7044), "amir" });
 
             migrationBuilder.InsertData(
                 table: "Courses",
-                columns: new[] { "Id", "CreatedAt", "Description", "EndDate", "Image", "IsActive", "StartDate", "TeacherId", "TimeSpan", "Title", "UpdatedAt" },
-                values: new object[] { 1L, new DateTime(2024, 3, 22, 15, 9, 23, 236, DateTimeKind.Utc).AddTicks(3012), "دوره ی پایتون مقدماتی. بهترین دوره برای شروع برنامه نویسی.", new DateOnly(2024, 5, 21), "default.jpg", true, new DateOnly(2024, 3, 22), 1L, 60, "پایتون مقدماتی", new DateTime(2024, 3, 22, 15, 9, 23, 236, DateTimeKind.Utc).AddTicks(3015) });
-
-            migrationBuilder.InsertData(
-                table: "UserCourses",
-                columns: new[] { "Id", "CourseId", "UserId" },
-                values: new object[] { 1L, 1L, 1L });
+                columns: new[] { "Id", "CreatedAt", "Description", "EndDate", "Image", "IsActive", "Price", "StartDate", "TeacherId", "TimeSpan", "Title", "UpdatedAt" },
+                values: new object[] { 1L, new DateTime(2024, 3, 24, 16, 34, 22, 816, DateTimeKind.Utc).AddTicks(9927), "دوره ی پایتون مقدماتی. بهترین دوره برای شروع برنامه نویسی.", new DateOnly(2024, 5, 23), "default.jpg", true, 0m, new DateOnly(2024, 3, 24), 1L, 60, "پایتون مقدماتی", new DateTime(2024, 3, 24, 16, 34, 22, 816, DateTimeKind.Utc).AddTicks(9934) });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Courses_TeacherId",
@@ -171,14 +182,9 @@ namespace Infrastructure.Migrations
                 column: "CourseId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserCourses_CourseId",
-                table: "UserCourses",
-                column: "CourseId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_UserCourses_UserId",
-                table: "UserCourses",
-                column: "UserId");
+                name: "IX_UserCourse_UsersId",
+                table: "UserCourse",
+                column: "UsersId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_Email",
@@ -200,7 +206,10 @@ namespace Infrastructure.Migrations
                 name: "HomeWorkAnswers");
 
             migrationBuilder.DropTable(
-                name: "UserCourses");
+                name: "SystemLogs");
+
+            migrationBuilder.DropTable(
+                name: "UserCourse");
 
             migrationBuilder.DropTable(
                 name: "HomeWorks");

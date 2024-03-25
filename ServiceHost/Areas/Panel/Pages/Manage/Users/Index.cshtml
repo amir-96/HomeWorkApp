@@ -40,8 +40,15 @@
         {
           <tr>
             <td>
-              <div class="flex items-center justify-center gap-2 text-center">
-                <img class="w-8 h-8 rounded-full ring-1 ring-lime-400" src="~/images/default.png" alt="" />
+              <div class="flex items-center gap-2 text-center">
+                @if (user.Image == "default.png" || user.Image == null)
+                {
+                  <img class="w-8 h-8 rounded-full ring-1 ring-lime-400" src="~/images/default.png" alt="" />
+                }
+                else
+                {
+                  <img class="w-8 h-8 rounded-full ring-1 ring-lime-400" src="~/images/ProfilePhotos/@user.UserName/@user.Image" alt="" />
+                }
                 <a asp-area="Panel" asp-page="/Manage/Users/UserInfo" asp-route-userId="@user.Id" class="hover:text-blue-800">
                   @user.FirstName @user.LastName
                 </a>

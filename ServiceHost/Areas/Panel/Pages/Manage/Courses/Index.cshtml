@@ -1,0 +1,119 @@
+﻿@page
+@model ServiceHost.Areas.Panel.Pages.Manage.Courses.IndexModel
+@{
+  ViewData["Title"] = "مدیریت دوره ها";
+}
+
+<div class="container w-full mx-auto px-2 mt-4">
+
+  <div class="flex items-center gap-3 text-gray-700 mb-12">
+    <p class="text-xl font-semibold">
+      مدیریت دوره ها
+    </p>
+    <p class="text-sm px-2 bg-blue-200 rounded-full">
+      @Model.CourseTable.Count دوره
+    </p>
+  </div>
+
+  <a class="p-2 px-5 bg-blue-600 hover:bg-blue-500 text-white text-lg rounded shdadow text-center w-fit" asp-area="Panel" asp-page="/Manage/Courses/AddCourse">
+    افزودن دوره
+  </a>
+
+  <!--Card-->
+
+  <div id="recipients" class="p-8 mt-6 rounded shadow bg-white">
+    <table id="example"
+           class="stripe hover"
+           style="width: 100%; padding-top: 1em; padding-bottom: 1em; text-align: center !important;">
+      <thead>
+        <tr>
+          <th data-priority="1">نام دوره</th>
+          <th data-priority="2">تاریخ شروع</th>
+          <th data-priority="3">تاریخ اتمام</th>
+          <th data-priority="4">استاد دوره</th>
+          <th data-priority="4">تعداد دانشجو</th>
+          <th data-priority="5">تنظیمات</th>
+        </tr>
+      </thead>
+      <tbody>
+        @foreach (var courseTable in Model.CourseTable)
+        {
+          <tr>
+            <td>
+              <div class="flex items-center gap-2 text-center">
+                @if (courseTable.Course.Image == "default.jpg" || courseTable.Course.Image == null)
+                {
+                  <img class="w-8 h-8 rounded-full ring-1 ring-lime-400" src="~/images/default.jpg" alt="" />
+                }
+                else
+                {
+                  <img class="w-8 h-8 rounded-full ring-1 ring-lime-400" src="~/images/CoursePhotos/@courseTable.Course.Image" alt="" />
+                }
+                <a asp-area="Panel" asp-page="/Manage/Users/UserInfo" asp-route-userId="@courseTable.Course.Id" class="hover:text-blue-800">
+                  @courseTable.Course.Title
+                </a>
+              </div>
+            </td>
+            <td>@Model.ToShamsi(courseTable.Course.StartDate)</td>
+            <td>@Model.ToShamsi(courseTable.Course.EndDate)</td>
+            <td>
+              @courseTable.Teacher.FirstName @courseTable.Teacher.LastName
+            </td>
+            <td>
+              @courseTable.Students.Count()
+            </td>
+            <td>
+              <div class="flex items-center justify-center gap-2 text-sm-center">
+                <a asp-area="Panel" asp-page="/Manage/Courses/EditCourse" asp-route-userId="@courseTable.Course.Id"><p class="p-1 bg-yellow-400 rounded w-16">ویرایش</p></a>
+                <a asp-area="Panel" asp-page="/Manage/Courses/DeleteCourse" asp-route-userId="@courseTable.Course.Id"><p class="p-1 bg-red-400 rounded w-16">حذف</p></a>
+              </div>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  <!--/Card-->
+</div>
+
+@section Scripts {
+  <script>
+    $(document).ready(function () {
+      var table = $("#example").DataTable({
+        responsive: true,
+        language: {
+          search: "جستجو: ",
+          lengthMenu: "نمایش _MENU_ ورودی",
+          info: "نمایش _START_ عدد _END_ از _TOTAL_ ورودی",
+          infoEmpty: "نمایش 0 عدد 0 از 0 ورودی",
+          infoFiltered: "(فیلتر شده از _MAX_ ورودی)",
+          paginate: {
+            first: "اولین",
+            previous: "قبلی",
+            next: "بعدی",
+            last: "آخرین",
+          },
+        },
+        columns: [
+          { searchable: true, orderable: true },
+          { searchable: false, orderable: false },
+          { searchable: false, orderable: false },
+          { searchable: true, orderable: true },
+          { searchable: false, orderable: false },
+          { searchable: false, orderable: false },
+        ],
+        initComplete: function () {
+          var api = this.api();
+          api.on("draw", function () {
+            if (api.rows({ search: "applied" }).data().length === 0) {
+              $(".dataTables_empty").text("اطلاعاتی برای نمایش پیدا نشد");
+            }
+          });
+        },
+      })
+        .columns.adjust()
+        .responsive.recalc();
+    });
+
+  </script>
+}

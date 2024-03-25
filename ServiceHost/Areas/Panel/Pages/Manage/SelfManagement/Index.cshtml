@@ -1,0 +1,116 @@
+﻿@page
+@model ServiceHost.Areas.Panel.Pages.Manage.SelfManagement.IndexModel
+@{
+  ViewData["Title"] = "ویرایش حساب کاربری";
+}
+
+<section class="relative w-full p-6 mx-auto bg-white rounded-md shadow-md">
+  <a asp-area="Panel" asp-page="/Manage/Users/Index">
+    <svg class="absolute left-4 top-4" height="40px" width="40px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 487.622 487.622" xml:space="preserve" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <g> <circle style="fill:#EED26A;" cx="243.811" cy="243.811" r="243.811"></circle> <circle style="fill:#D97077;" cx="243.811" cy="243.811" r="243.811"></circle> <path style="fill:#CA6168;" d="M487.622,243.811c0-4.875-0.16-9.711-0.441-14.516l-129.826-93.017l-131.876,93.094L199.87,351.343 l154.131,110.005C433.285,421.108,487.622,338.807,487.622,243.811z"></path> <polygon style="fill:#FFFFFF;" points="199.869,351.343 357.354,351.343 276.415,243.811 357.354,136.279 199.869,136.279 118.931,243.811 "></polygon> </g> </g> </g></svg>
+  </a>
+
+  <h2 class="text-lg font-semibold text-gray-700 capitalize">ویرایش کاربر</h2>
+
+  <div class="flex items-center justify-center gap-2 mx-auto">
+
+    <form class="relative w-fit" asp-page-handler="DeleteImage" method="post">
+
+      <input asp-for="UserId" value="@Model.UserForEdit.Id" type="hidden" />
+
+      <button type="submit" class="absolute bottom-[-32px] right-[29px] w-fit">
+        <svg class="w-5 h-5" viewBox="0 0 21 21" xmlns="http://www.w3.org/2000/svg" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g fill="none" fill-rule="evenodd" stroke="#464343" stroke-linecap="round" stroke-linejoin="round" transform="matrix(0 1 1 0 2.5 2.5)"> <path d="m3.98652376 1.07807068c-2.38377179 1.38514556-3.98652376 3.96636605-3.98652376 6.92192932 0 4.418278 3.581722 8 8 8s8-3.581722 8-8-3.581722-8-8-8"></path> <path d="m4 1v4h-4" transform="matrix(1 0 0 -1 0 6)"></path> </g> </g></svg>
+      </button>
+    </form>
+
+    <form class="w-fit" asp-page-handler="ChangeImage" method="post" enctype="multipart/form-data">
+
+      <input asp-for="UserId" value="@Model.UserForEdit.Id" type="hidden" />
+
+      <div class="flex flex-col justify-center items-center justify-center space-x-6 my-8">
+        <div class="flex items-center justify-center">
+          <div class="shrink-0">
+            @if (Model.UserForEdit.Image == null || Model.UserForEdit.Image == "default.png")
+            {
+              <img id='preview_img' draggable="false" class="h-16 w-16 object-cover rounded-full" src="~/images/default.png" alt="Current profile photo" />
+            }
+            else
+            {
+              <img id='preview_img' draggable="false" class="h-16 w-16 object-cover rounded-full" src="~/images/ProfilePhotos/@Model.UserForEdit.UserName/@Model.UserForEdit.Image" alt="Current profile photo" />
+            }
+          </div>
+          <label class="block w-fit mx-auto">
+            <span class="sr-only">تصویر جدید انتخاب کنید</span>
+            <input asp-for="Image" type="file" accept="image/jpeg, image/png, image/jpg" onchange="loadFile(event)" class="block w-full text-sm text-slate-500
+        file:mr-4 file:py-2 file:px-4
+        file:rounded-full file:border-0
+        file:text-sm file:font-semibold
+        file:bg-violet-50 file:text-violet-700
+        hover:file:bg-violet-100
+      " />
+          </label>
+        </div>
+
+        <button id="submitButton" class="mt-5 py-1 px-8 rounded-full bg-violet-200 hover:bg-violet-300" disabled>ثبت</button>
+      </div>
+    </form>
+  </div>
+
+  <div asp-validation-summary="ModelOnly" class="text-sm font-semibold text-red-500"></div>
+
+  <form asp-page-handler="EditUser" method="post">
+
+    <div class="grid grid-cols-1 gap-6 mt-4">
+
+      <input asp-for="EditUserDTO.Id" value="@Model.UserForEdit.Id" type="hidden" />
+
+      <div>
+        <label asp-for="EditUserDTO.FirstName" class="text-gray-700">نام</label>
+        <input asp-for="EditUserDTO.FirstName" value="@Model.UserForEdit.FirstName" aria-required="true" class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring">
+        <span asp-validation-for="EditUserDTO.FirstName" class="text-sm font-semibold text-red-500"></span>
+      </div>
+
+      <div>
+        <label asp-for="EditUserDTO.LastName" class="text-gray-700">نام خانوادگی</label>
+        <input asp-for="EditUserDTO.LastName" value="@Model.UserForEdit.LastName" aria-required="true" class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring">
+        <span asp-validation-for="EditUserDTO.LastName" class="text-sm font-semibold text-red-500"></span>
+      </div>
+
+      <div>
+        <label asp-for="EditUserDTO.PhoneNumber" class="text-gray-700">شماره تماس</label>
+        <input asp-for="EditUserDTO.PhoneNumber" value="@Model.UserForEdit.PhoneNumber" aria-required="true" class="text-right block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring">
+        <span asp-validation-for="EditUserDTO.PhoneNumber" class="text-sm font-semibold text-red-500"></span>
+      </div>
+    </div>
+
+    <div class="flex justify-end mt-6">
+      <button class="px-8 py-2.5 w-full leading-5 text-white transition-colors duration-300 transform bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:bg-gray-600">ویرایش</button>
+    </div>
+  </form>
+</section>
+
+@section Scripts {
+  <script>
+    var loadFile = function (event) {
+      var input = event.target;
+      var file = input.files[0];
+
+      // Enable or disable the button based on whether an image is selected
+      var button = document.getElementById('submitButton');
+      if (file) {
+        button.disabled = false;
+
+        var output = document.getElementById('preview_img');
+        output.src = URL.createObjectURL(event.target.files[0]);
+        output.onload = function () {
+          URL.revokeObjectURL(output.src)
+        };
+      } else {
+        button.disabled = true;
+      }
+    };
+
+    // Add event listener for change event on file input field
+    var fileInput = document.getElementById('Image'); // Change 'upload' to 'Image'
+    fileInput.addEventListener('change', loadFile);
+  </script>
+}

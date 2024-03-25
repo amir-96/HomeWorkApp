@@ -1,13 +1,14 @@
 ﻿using Application.Repositories;
 using Infrastructure.Context;
 using Infrastructure.Services;
+using Infrastructure.Services.Utilities;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Infrastructure
 {
-  public static class InfrastructureServices
+    public static class InfrastructureServices
   {
     public static void AddInfrastructureServices(this IServiceCollection services, string connectionString)
     {
