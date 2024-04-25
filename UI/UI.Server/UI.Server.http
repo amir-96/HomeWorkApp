@@ -1,6 +1,0 @@
-@UI.Server_HostAddress = http://localhost:5070
-
-GET {{UI.Server_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
